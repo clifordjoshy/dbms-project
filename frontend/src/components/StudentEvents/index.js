@@ -1,3 +1,6 @@
+// shows a list of events the student is yet to register for
+//shows list of events student has registered for
+
 const StudentEvents = () => {
   return (
     <>
