@@ -1,0 +1,30 @@
+import { useContext, useState } from "react";
+import { AppContext } from "../../App";
+import background from "./background.jpg";
+
+const HomePage = () => {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const { userToken, setUserToken } = useContext(AppContext);
+
+  return (
+    <>
+      <div
+        className="vh-100 vw-100 position-absolute top-0 start-0"
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundSize: "cover",
+          zIndex: "-1",
+        }}
+      >
+        <div className="w-100 h-100" style={{ backgroundColor: "#120f3df5" }} />
+      </div>
+      <div className="d-flex vh-100 flex-column">
+        <div className="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-white">
+          <h1>CSED has a strict academic integrity policy</h1>
+        </div>
+      </div>
+    </>
+  );
+};
+export default HomePage;
