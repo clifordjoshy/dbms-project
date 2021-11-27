@@ -6,6 +6,8 @@ import BootstrapNavbar from "./components/Navbar";
 import StudentEvents from "./components/StudentEvents";
 import ClubAdminPanel from "./components/ClubAdminPanel";
 import SysAdminPanel from "./components/SysAdminPanel";
+import SysAdminMakeClub from "./components/SysClubPanel";
+import SysAdminMakeVenue from "./components/SysVenuePanel";
 import HomePage from "./components/HomePage";
 
 export const AppContext = createContext();
@@ -29,6 +31,8 @@ function App() {
           <Route path="/clubadmin/:eventId" element={<ClubAdminPanel />} />
           {/* sys admin page */}
           <Route path="/admin" element={<SysAdminPanel />} />
+          <Route path="/admin/createclub" element={<SysAdminMakeClub />} />
+          <Route path="/admin/createvenue" element={<SysAdminMakeVenue />} />
         </Routes>
       </Router>
     </AppContext.Provider>

@@ -1,12 +1,12 @@
+import { Button } from 'react-bootstrap';
+
 const SysAdminPanel = () => {
   return (
     <>
-      <h1>Sys Admin Page</h1>
-      <h1>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sunt nesciunt similique eius possimus,
-        voluptas incidunt corrupti iure animi et.
-      </h1>
+      <Button style={{marginLeft: "33em", marginTop: "15em"}} onClick={() =>  window.location.href='/admin/createclub'}>Create Club</Button>
+      <Button style={{marginLeft: "5em", marginTop: "15em"}} onClick={() =>  window.location.href='/admin/createvenue'}>Create Venue</Button>
     </>
   );
 };
+
 export default SysAdminPanel;
