@@ -44,7 +44,41 @@ def user_register():
     else:
         return jsonify({ "message" : "Roll number already exists" })
 
-@app.route("/login", methods=["POST"])
+@app.route("/login/student", methods=["POST"])
+@cross_origin()
+def user_login():
+    try:
+        username = request.json['roll_no']
+        password = request.json['password']
+    except KeyError:
+        return jsonify({"msg":"One or more fields are empty."})
+
+    user = Students.query.filter_by(roll_number=username).first()
+    
+    if user is not None and check_password_hash( user.password, password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token)
+    else:
+        return jsonify({"message": "Incorrect roll number or password"})
+
+@app.route("/login/ca", methods=["POST"])
+@cross_origin()
+def user_login():
+    try:
+        username = request.json['club_name']
+        password = request.json['password']
+    except KeyError:
+        return jsonify({"msg":"One or more fields are empty."})
+
+    user = Clubs.query.filter_by(club=username).first()
+    
+    if user is not None and check_password_hash( user.password, password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token)
+    else:
+        return jsonify({"message": "Incorrect club name or password"})
+
+@app.route("/login/sa", methods=["POST"])
 @cross_origin()
 def user_login():
     try:
