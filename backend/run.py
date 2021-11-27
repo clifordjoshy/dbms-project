@@ -30,9 +30,9 @@ def user_register():
 
     if roll_number is None:
         if password == confirmpassword:
-            new_user = Users(username, email, hashed_password)
+            new_student = Students(name, hashed_password, roll_no, email)
 
-            db.session.add(new_user)
+            db.session.add(new_student)
             db.session.commit()
 
             access_token = create_access_token(identity=roll_no)
