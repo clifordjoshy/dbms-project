@@ -6,8 +6,7 @@ from flask_jwt_extended import (create_access_token, get_jwt_identity,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from main import *
-from models import (Choice, Question, Users, choices_schema, question_schema,
-                    questions_schema, users_schema, choices_admin_schema)
+from models import (Students, Members, Clubs, Participation, Events, Bookings, Venues, SysAdmin)
 
 from flask_cors import cross_origin
 
@@ -18,32 +17,32 @@ db.create_all()
 @cross_origin()
 def user_register():
     try:
-        username = request.json['username']
+        name = request.json['name']
+        roll_no = request.json['roll_no']
         email = request.json['email']
         password = request.json['password']
         hashed_password = generate_password_hash(password, method='sha256')
-        confirmpassword = request.json['confirmpassword']
+        confirm_password = request.json['confirm_password']
     except KeyError:
         return jsonify({"msg":"One or more fields are empty."})
 
-    user = Users.query.filter_by(username=username).first()
-    useremail = Users.query.filter_by(email=email).first()
+    roll_number = Students.query.filter_by(roll_number=roll_no).first()
 
-    if user is None and useremail is None:
+    if roll_number is None:
         if password == confirmpassword:
             new_user = Users(username, email, hashed_password)
 
             db.session.add(new_user)
             db.session.commit()
 
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=roll_no)
             return jsonify(access_token=access_token)
 
         else:
             return jsonify({"message": "Passwords don't match"})
     
     else:
-        return jsonify({ "message" : "Username or email already exists" })
+        return jsonify({ "message" : "Roll number already exists" })
 
 @app.route("/login", methods=["POST"])
 @cross_origin()
