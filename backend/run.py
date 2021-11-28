@@ -102,12 +102,32 @@ def add_event():
     event_name = request.json['event_name']
     event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
     event_desc = request.json['event_desc']
+    event_venue = request.json['event_venue']
     max_limit = request.json['max_limit']
     slot = request.json['slot']
     date = datetime.date.strptime(request.json['date'], '%Y-%m-%d')
+
+    booking= Bookings(event_venue, slot. date)
+    db.session.add(booking)
     
-    event = Events(event_name, event_club, event_desc, max_limit, slot, date)
+    event = Events(event_name, event_club, event_desc, max_limit, booking.booking_id)
     db.session.add(event)
+    db.session.commit()
+    return jsonify({"event_id":f"{event.event_id}"})
+
+@app.route("/event_edit", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def add_event():
+    event_name = request.json['event_name']
+    event = Event.query.filter_by(event_name=event_name).first()
+    booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
+    event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
+    event.event_desc = request.json['event_desc']
+    event.max_limit = request.json['max_limit']
+    booking.slot = request.json['slot']
+    booking.date = datetime.date.strptime(request.json['date'], '%Y-%m-%d')
+    
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
 
