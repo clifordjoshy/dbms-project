@@ -61,6 +61,13 @@ class Events(db.Model):
         self.max_limit  = max_limit
         self.event_booking_id = event_booking_id
 
+class EventsSchema(ma.Schema):
+    class Meta:
+        fields = ('event_id', 'event_name', 'event_club', 'event_desc' ,'max_limit', 'event_booking_id')
+
+event_schema = EventsSchema()
+events_schema = EventsSchema(many=True)
+
 class Bookings(db.Model):
     booking_id = db.Column(db.Integer, primary_key = True)
     booking_venue_name = db.Column(db.String(50), ForeignKey('venues.venue_name'))
