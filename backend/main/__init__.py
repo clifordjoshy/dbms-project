@@ -5,7 +5,6 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import os
 import datetime
-import psycopg2
 # from sqlalchemy_utils.functions import database_exists
 
 basedir = os.getcwd()

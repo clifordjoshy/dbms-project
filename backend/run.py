@@ -165,6 +165,34 @@ def add_event():
         member = Members(roll_no, club_name, "pos1")
         db.session.add(member)
         db.session.commit()
+    return jsonify({"msg":"Members added."})
+
+@app.route("/club_member_delete", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def add_event():
+    club_name = request.json['club_name']
+    roll_nos = request.json['roll_nos']
+
+    for roll_no in roll_nos:
+        member = Member.query.filter_by(member_roll_number=roll_no).first()
+        db.session.delete(member)
+        db.session.commit()
+    return jsonify({"msg":"Members deleted."})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/club_add", methods=['POST'])
 @cross_origin()
