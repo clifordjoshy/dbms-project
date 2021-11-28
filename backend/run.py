@@ -47,7 +47,7 @@ def user_register():
 
 @app.route("/login/student", methods=["POST"])
 @cross_origin()
-def user_login():
+def stud_login():
     try:
         username = request.json['roll_no']
         password = request.json['password']
@@ -64,7 +64,7 @@ def user_login():
 
 @app.route("/login/ca", methods=["POST"])
 @cross_origin()
-def user_login():
+def ca_login():
     try:
         username = request.json['club_name']
         password = request.json['password']
@@ -81,7 +81,7 @@ def user_login():
 
 @app.route("/login/sa", methods=["POST"])
 @cross_origin()
-def user_login():
+def sa_login():
     try:
         username = request.json['username']
         password = request.json['password']
@@ -119,7 +119,7 @@ def add_event():
 @app.route("/event_edit", methods=['POST'])
 @cross_origin()
 @jwt_required()
-def add_event():
+def edit_event():
     event_id = request.json['event_id']
     event = Event.query.filter_by(event_id=event_id).first()
     event_name = request.json['event_name']
@@ -136,7 +136,7 @@ def add_event():
 @app.route("/event_view", methods=['POST'])
 @cross_origin()
 @jwt_required()
-def add_event():
+def view_event():
     event_id = request.json['event_id']
     event = Event.query.filter_by(event_id=event_id).first().club
     event = event_schema.dump(event)
@@ -146,7 +146,7 @@ def add_event():
 @app.route("/club_edit", methods=['POST'])
 @cross_origin()
 @jwt_required()
-def add_event():
+def edit_club():
     club_name = request.json['club_name']
     club = Event.query.filter_by(club_name=club_name).first()
     club.club_desc = request.json['club_desc']
@@ -157,7 +157,7 @@ def add_event():
 @app.route("/club_member_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
-def add_event():
+def add_member():
     club_name = request.json['club_name']
     roll_nos = request.json['roll_nos']
 
@@ -170,7 +170,7 @@ def add_event():
 @app.route("/club_member_delete", methods=['POST'])
 @cross_origin()
 @jwt_required()
-def add_event():
+def delete_member():
     club_name = request.json['club_name']
     roll_nos = request.json['roll_nos']
 
@@ -180,24 +180,10 @@ def add_event():
         db.session.commit()
     return jsonify({"msg":"Members deleted."})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @app.route("/club_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
-  def add_club():
+def add_club():
     club_name = request.json['event_name']  
     club_desc = request.json['event_desc']
     password = request.json['password']
@@ -207,16 +193,16 @@ def add_event():
     db.session.commit()
     return jsonify({"New club added to Database"})
 
-  @app.route("/venue_add", methods=['POST'])
-  @cross_origin()
-  @jwt_required()
-    def add_venue():
-        venue_name = request.json['venue_name']         
-        
-        venue = Venue(venue_name)
-        db.session.add(venue)
-        db.session.commit()
-        return jsonify({"New venue added to Database"})
+@app.route("/venue_add", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def add_venue():
+    venue_name = request.json['venue_name']         
+    
+    venue = Venue(venue_name)
+    db.session.add(venue)
+    db.session.commit()
+    return jsonify({"New venue added to Database"})
 
 
 # @app.route("/all_questions", methods=['GET'])
