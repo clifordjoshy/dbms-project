@@ -130,6 +130,30 @@ def add_event():
     
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
+  
+@app.route("/club_add", methods=['POST'])
+@cross_origin()
+@jwt_required()
+  def add_club():
+    club_name = request.json['event_name']  
+    club_desc = request.json['event_desc']
+    password = request.json['password']
+    
+    club = Clubs(club_name,club_desc,password)
+    db.session.add(club)
+    db.session.commit()
+    return jsonify({"New club added to Database"})
+
+  @app.route("/venue_add", methods=['POST'])
+  @cross_origin()
+  @jwt_required()
+    def add_venue():
+        venue_name = request.json['venue_name']         
+        
+        venue = Venue(venue_name)
+        db.session.add(venue)
+        db.session.commit()
+        return jsonify({"New venue added to Database"})
 
 # @app.route("/all_questions", methods=['GET'])
 # @cross_origin()
