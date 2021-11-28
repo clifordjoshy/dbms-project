@@ -132,7 +132,40 @@ def add_event():
     
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
-  
+
+@app.route("/event_view", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def add_event():
+    event_id = request.json['event_id']
+    event = Event.query.filter_by(event_id=event_id).first().club
+    event = event_schema.dump(event)
+    
+    return jsonify({"event":event})
+
+@app.route("/club_edit", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def add_event():
+    club_name = request.json['club_name']
+    club = Event.query.filter_by(club_name=club_name).first()
+    club.club_desc = request.json['club_desc']
+    
+    db.session.commit()
+    return jsonify({"club":f"{club_name}"})
+
+@app.route("/club_member_add", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def add_event():
+    club_name = request.json['club_name']
+    roll_nos = request.json['roll_nos']
+
+    for roll_no in roll_nos:
+        member = Members(roll_no, club_name, "pos1")
+        db.session.add(member)
+        db.session.commit()
+
 @app.route("/club_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -156,6 +189,7 @@ def add_event():
         db.session.add(venue)
         db.session.commit()
         return jsonify({"New venue added to Database"})
+
 
 # @app.route("/all_questions", methods=['GET'])
 # @cross_origin()
