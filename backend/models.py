@@ -18,9 +18,9 @@ class Students(db.Model):
         self.email = email
 
 class Members(db.Model):
-    member_roll_number = db.Column(db.String(9), primary_key = True, db.ForeignKey('students.roll_number'))
+    member_roll_number = db.Column(db.String(9), db.ForeignKey('students.roll_number'), primary_key = True)
     club = db.Column(db.String(50), db.ForeignKey('clubs.club_name'))
-    position = db.Column(Enum("pos1", "pos2", "pos3"))
+    position = db.Column(db.String(50))
 
     def __init__(self, rollnumber, club, position):
         self.rollnumber = rollnumber
@@ -39,8 +39,8 @@ class Clubs(db.Model):
         self.position = position
 
 class Participation(db.Model):
-    participation_roll = db.Column(db.String(9), primary_key = True, db.ForeignKey('students.roll_number'))
-    participation_event = db.Column(db.Integer, db.ForeignKey('event.event_id'))
+    participation_roll = db.Column(db.String(9), db.ForeignKey('students.roll_number'), primary_key = True)
+    participation_event = db.Column(db.Integer, db.ForeignKey('events.event_id'))
 
     def __init__(self, participation_roll, participation_event):
         self.participation_roll = participation_roll
@@ -52,7 +52,7 @@ class Events(db.Model):
     event_club = db.Column(db.String(50), db.ForeignKey('clubs.club_name'))
     event_desc = db.Column(db.String(200))
     max_limit = db.Column(db.Integer)
-    event_booking_id = db.Column(db.Integer, db.ForeignKey('booking.booking_id'))
+    event_booking_id = db.Column(db.Integer, db.ForeignKey('bookings.booking_id'))
 
     def __init__(self, event_name, event_club, event_desc, max_limit, event_booking_id):
         self.event_name = event_name
@@ -70,8 +70,8 @@ events_schema = EventsSchema(many=True)
 
 class Bookings(db.Model):
     booking_id = db.Column(db.Integer, primary_key = True)
-    booking_venue_name = db.Column(db.String(50), ForeignKey('venues.venue_name'))
-    slot = db.Column(Enum("slot1", "slot2", "slot3"))\
+    booking_venue_name = db.Column(db.String(50), db.ForeignKey('venues.venue_name'))
+    slot = db.Column(db.String(50))
     date = db.Column(db.DateTime)
 
     def __init__(self, booking_venue_name, slot, date):
@@ -87,7 +87,7 @@ class Venues(db.Model):
 
 class SysAdmin(db.Model):
     admin_username = db.Column(db.String(50), primary_key = True)
-    admin_password = db.Column(db.strptime(100))
+    admin_password = db.Column(db.String(100))
 
     def __init__(self, admin_username, admin_password):
         self.admin_username = admin_username
