@@ -6,7 +6,8 @@ from flask_jwt_extended import (create_access_token, get_jwt_identity,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from main import *
-from models import (Students, Members, Clubs, Participation, Events, Bookings, Venues, SysAdmin)
+from models import (Students, Members, Clubs, Participation, Events, Bookings, Venues, SysAdmin,
+                    event_schema, events_schema)
 
 from flask_cors import cross_origin
 
@@ -119,8 +120,9 @@ def add_event():
 @cross_origin()
 @jwt_required()
 def add_event():
+    event_id = request.json['event_id']
+    event = Event.query.filter_by(event_id=event_id).first()
     event_name = request.json['event_name']
-    event = Event.query.filter_by(event_name=event_name).first()
     booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
     event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
     event.event_desc = request.json['event_desc']
