@@ -22,7 +22,7 @@ class Members(db.Model):
     club = db.Column(db.String(50), db.ForeignKey('clubs.club_name'))
     position = db.Column(Enum("pos1", "pos2", "pos3"))
 
-    def __init__(self, name, member_roll_number, club, position):
+    def __init__(self, rollnumber, club, position):
         self.rollnumber = rollnumber
         self.club = club
         self.position = position
