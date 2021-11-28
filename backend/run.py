@@ -184,8 +184,8 @@ def delete_member():
 @cross_origin()
 @jwt_required()
 def add_club():
-    club_name = request.json['event_name']  
-    club_desc = request.json['event_desc']
+    club_name = request.json['club_name']  
+    club_desc = request.json['club_desc']
     password = request.json['password']
     
     club = Clubs(club_name,club_desc,password)
