@@ -191,8 +191,8 @@ def add_club():
     club = Clubs(club_name,club_desc,password)
     db.session.add(club)
     db.session.commit()
-    return jsonify({"New club added to Database"})
-
+    return jsonify({"New club":f"{club_name}"})
+  
 @app.route("/venue_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -202,7 +202,7 @@ def add_venue():
     venue = Venue(venue_name)
     db.session.add(venue)
     db.session.commit()
-    return jsonify({"New venue added to Database"})
+    return jsonify({"New venue":f"{venue_name}"})
   
 @app.route("/event_register", methods=['POST'])
 @cross_origin()
