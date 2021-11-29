@@ -26,6 +26,11 @@ class Members(db.Model):
         self.rollnumber = rollnumber
         self.club = club
         self.position = position
+        
+class MembersSchema(ma.Schema):
+    class Meta:
+        fields = ('member_roll_number','position')
+members_schema = MembersSchema(many=True)
 
 
 class Clubs(db.Model):
