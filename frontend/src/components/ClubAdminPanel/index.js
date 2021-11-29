@@ -2,11 +2,11 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { AppContext } from "../../App";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import "./index.css";
 import trashIcon from "../../icons/trash.svg";
 import expandIcon from "../../icons/expand.svg";
 import NewMemberModal from "./NewMemberModal";
 import NewEventModal from "./NewEventModal";
+import { useNavigate } from "react-router-dom";
 
 const ClubAdminPanel = () => {
   const { userToken } = useContext(AppContext);
@@ -17,6 +17,9 @@ const ClubAdminPanel = () => {
   const [isDeletingMembers, setIsDeletingMembers] = useState(false);
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     setDescription(
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sunt nesciunt similique eius possimus,\
@@ -114,7 +117,13 @@ const ClubAdminPanel = () => {
                       <br />
                       Friday 10:30pm
                     </Card.Text>
-                    <input type="image" src={expandIcon} className="float-end" style={{ height: "20px" }} />
+                    <input
+                      type="image"
+                      src={expandIcon}
+                      className="float-end"
+                      style={{ height: "20px" }}
+                      onClick={() => navigate(`${1}`)}
+                    />
                   </Card.Body>
                 </Card>
               );

@@ -10,6 +10,7 @@ import SysAdminPanel from "./components/SysAdminPanel";
 import SysAdminMakeClub from "./components/SysClubPanel";
 import SysAdminMakeVenue from "./components/SysVenuePanel";
 import HomePage from "./components/HomePage";
+import ClubEventPanel from "./components/ClubEventPanel";
 
 export const AppContext = createContext();
 
@@ -30,7 +31,7 @@ function App() {
           {/* club admin page */}
           <Route path="/clubadmin" element={<ClubAdminPanel />} />
           {/* club admin see data for an event */}
-          <Route path="/clubadmin/:eventId" element={<ClubAdminPanel />} />
+          <Route path="/clubadmin/:eventId" element={<ClubEventPanel />} />
           {/* sys admin page */}
           <Route path="/admin" element={<SysAdminPanel />} />
           <Route path="/admin/createclub" element={<SysAdminMakeClub />} />
