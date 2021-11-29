@@ -5,6 +5,7 @@ import { useState } from "react";
 import BootstrapNavbar from "./components/Navbar";
 import StudentEvents from "./components/StudentEvents";
 import ClubAdminPanel from "./components/ClubAdminPanel";
+import ClubDetailsPanel from "./components/ClubDetailsPanel";
 import SysAdminPanel from "./components/SysAdminPanel";
 import SysAdminMakeClub from "./components/SysClubPanel";
 import SysAdminMakeVenue from "./components/SysVenuePanel";
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           {/* for unauthenticated users. contains all common data*/}
           <Route path="/" element={<HomePage />} />
+          <Route path="/:clubname" element={<ClubDetailsPanel />} />
           {/* see all events + registered events as student */}
           <Route path="/events" element={<StudentEvents />} />
           {/* club admin page */}
