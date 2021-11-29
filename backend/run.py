@@ -219,7 +219,7 @@ def event_register():
     participant=Participation(rollNumber,event_id)
     db.session.add(participant)
     db.session.commit()    
- return jsonify({"msg":"Registered"})
+    return jsonify({"msg":"Registered"})
 
 @app.route("/events_all", methods=['GET'])
 @cross_origin()
@@ -238,7 +238,7 @@ def events_student():
     participations = Participation.query.filter_by(participation_roll=roll_no).all()
     for participation in participations:
         event = Events.query.filter_by(event_id=participation.participation_event).first()
-        events[event.event_id)] = event.event_name
+        events[event.event_id] = event.event_name
     return jsonify({"all events":events})
 
 
