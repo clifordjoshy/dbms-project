@@ -39,7 +39,7 @@ const NewEventModal = ({ show, onHide }) => {
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header>
-        <Modal.Title id="contained-modal-title-vcenter">New Member</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">New Event</Modal.Title>
         <button className="btn-close" onClick={onHide} />
       </Modal.Header>
       <Modal.Body>
