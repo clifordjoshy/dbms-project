@@ -38,6 +38,12 @@ class Clubs(db.Model):
         self.club = club
         self.position = position
 
+class ClubsSchema(ma.Schema):
+    class Meta:
+        fields = ('club_name', 'club_desc')
+
+clubs_schema = ClubsSchema(many=True)
+
 class Participation(db.Model):
     participation_roll = db.Column(db.String(9), db.ForeignKey('students.roll_number'), primary_key = True)
     participation_event = db.Column(db.Integer, db.ForeignKey('events.event_id'))

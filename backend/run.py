@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from main import *
 from models import (Students, Members, Clubs, Participation, Events, Bookings, Venues, SysAdmin,
-                    event_schema, events_schema)
+                    event_schema, events_schema, clubs_schema)
 
 from flask_cors import cross_origin
 
@@ -223,10 +223,20 @@ def event_register():
 
 @app.route("/events_all", methods=['GET'])
 @cross_origin()
-@jwt_required()
 def events_all():
     events = Events.query.all()
     events = events_schema.dump(events)
+    return jsonify({"all events":events})
+
+@app.route("/events_future", methods=['GET'])
+@cross_origin()
+def events_future():
+    events = Events.query.all()
+    future_events = {}
+    for event in events:
+        booking = Bookings.query.filter_by(booking_id=event.event_booking_id)
+        if booking.date > datetime.datetime.now:
+            future_events[event.event_id] = event.event_name
     return jsonify({"all events":events})
 
 @app.route("/events_student", methods=['POST'])
@@ -240,6 +250,13 @@ def events_student():
         event = Events.query.filter_by(event_id=participation.participation_event).first()
         events[event.event_id] = event.event_name
     return jsonify({"all events":events})
+
+@app.route("/clubs_all", methods=['GET'])
+@cross_origin()
+def clubs_all():
+    clubs = clubs.query.all()
+    clubs = clubs_schema.dump(clubs)
+    return jsonify({"all clubs":clubs})
 
 
 # @app.route("/all_questions", methods=['GET'])
