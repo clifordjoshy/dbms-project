@@ -203,6 +203,19 @@ def add_venue():
     db.session.add(venue)
     db.session.commit()
     return jsonify({"New venue added to Database"})
+  
+@app.route("/event_register", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def event_register():
+    rollNumber = request.json['rollNumber']
+    event_id=request.json['event_id']
+    
+    
+    participant=Participants(rollNumber,event_id)
+    db.session.add(participant)
+    db.session.commit()    
+ return jsonify({"msg":"Registered"})
 
 
 # @app.route("/all_questions", methods=['GET'])
