@@ -138,7 +138,7 @@ def edit_event():
 @jwt_required()
 def view_event():
     event_id = request.json['event_id']
-    event = Event.query.filter_by(event_id=event_id).first().club
+    event = Event.query.filter_by(event_id=event_id).first()
     event = event_schema.dump(event)
     
     return jsonify({"event":event})
@@ -210,12 +210,36 @@ def add_venue():
 def event_register():
     rollNumber = request.json['rollNumber']
     event_id=request.json['event_id']
+
+    count = Participation.query.filter_by(participation_event=event_id).count()
+    max_limit = Events.query.filter_by(event_id=event_id).first().max_limit
+    if count >= max_limit:
+        return jsonify({"msg":"Max participants reached."})
     
-    
-    participant=Participants(rollNumber,event_id)
+    participant=Participation(rollNumber,event_id)
     db.session.add(participant)
     db.session.commit()    
  return jsonify({"msg":"Registered"})
+
+@app.route("/events_all", methods=['GET'])
+@cross_origin()
+@jwt_required()
+def events_all():
+    events = Events.query.all()
+    events = events_schema.dump(events)
+    return jsonify({"all events":events})
+
+@app.route("/events_student", methods=['POST'])
+@cross_origin()
+@jwt_required()
+def events_student():
+    events = {}
+    roll_no = get_jwt_identity()
+    participations = Participation.query.filter_by(participation_roll=roll_no).all()
+    for participation in participations:
+        event = Events.query.filter_by(event_id=participation.participation_event).first()
+        events[event.event_id)] = event.event_name
+    return jsonify({"all events":events})
 
 
 # @app.route("/all_questions", methods=['GET'])
