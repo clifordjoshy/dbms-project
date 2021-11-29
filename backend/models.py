@@ -90,6 +90,11 @@ class Venues(db.Model):
 
     def __init__(self, venue_name):
         self.venue_name = venue_name
+        
+class VenuesSchema(ma.Schema):
+    class Meta:
+        fields = ('venue_name')
+venues_schema = VenuesSchema(many=True)
 
 class SysAdmin(db.Model):
     admin_username = db.Column(db.String(50), primary_key = True)
