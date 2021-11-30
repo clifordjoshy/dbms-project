@@ -187,10 +187,11 @@ def edit_club():
 def add_member():
     club_name = get_jwt_identity()
     roll_no = request.json['roll_no']
-    print(club_name)
-    print(roll_no)
+    position=request.json['position']
+    #print(club_name)
+    #print(roll_no)
 
-    member = Members(roll_no, club_name, "pos1")
+    member = Members(roll_no, club_name, position)
     db.session.add(member)
     db.session.commit()
     return jsonify({"msg":"Member added."})
