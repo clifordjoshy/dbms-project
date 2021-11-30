@@ -185,16 +185,16 @@ def edit_club():
 @cross_origin()
 @jwt_required()
 def add_member():
-    club_name = get_jwt_identity()
-    roll_no = request.json['roll_no']
-    position=request.json['position']
-    #print(club_name)
-    #print(roll_no)
-
-    member = Members(roll_no, club_name, position)
-    db.session.add(member)
-    db.session.commit()
-    return jsonify({"msg":"Member added."})
+    try:
+        club_name = get_jwt_identity()
+        roll_no = request.json['roll_no']
+        position=request.json['position']
+        member = Members(roll_no, club_name, position)
+        db.session.add(member)
+        db.session.commit()
+        return jsonify({"msg":"Member added."})
+    except:
+        return jsonify({"msg":"Invalid input"})
 
 @app.route("/club_member_delete", methods=['POST'])
 @cross_origin()
