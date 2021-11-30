@@ -288,18 +288,23 @@ def events_student():
 @app.route("/clubs_all", methods=['GET'])
 @cross_origin()
 def clubs_all():
-    clubs = clubs.query.all()
-    clubs = clubs_schema.dump(clubs)
-    return jsonify({"all clubs":clubs})
+    try:
+        clubs = clubs.query.all()
+        clubs = clubs_schema.dump(clubs)
+        return jsonify({"all clubs":clubs})
+    except:
+        return jsonify({"msg":"No clubs"})
   
 @app.route("/venues_all", methods=['GET'])
 @cross_origin()
 @jwt_required()
 def venues_all():
-    venues = Venues.query.all()
-    venues = venues_schema.dump(venues)
-    
-    return jsonify({"all venues":venues})
+    try:
+        venues = Venues.query.all()
+        venues = venues_schema.dump(venues)
+        return jsonify({"all venues":venues})
+    except:
+        return jsonify({"msg":"No venues"})
   
 @app.route("/club_members", methods=['GET'])
 @cross_origin()
@@ -438,5 +443,4 @@ def registered_students():
 
 
 if __name__ == "__main__":
-    
     app.run(debug=True)
