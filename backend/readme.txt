@@ -91,3 +91,7 @@ recieve: members of club administered by current user(ca)
 GET
 send: event_id
 recieve: all participants
+
+/club_info
+GET
+recieve: club_name, club_desc, members, events
