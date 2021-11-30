@@ -304,11 +304,13 @@ def venues_all():
 @cross_origin()
 @jwt_required()
 def club_members():
-    club_name = get_jwt_identity()
+    club_name= get_jwt_identity()
     members=Members.query.filter_by(club=club_name).all()
     members=members_schema.dump(members)
-
-    return jsonify({"Members and positions of the club are":members}) 
+    for member in members:
+        name=Students.query.filter_by(roll_number=member.member_roll_number).first().name()
+        member['name']=name
+    return jsonify({"Members and positions of the club are":members})
 
 @app.route("/registered_students", methods=['GET'])
 @cross_origin()
