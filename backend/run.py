@@ -339,6 +339,10 @@ def club_info():
     result['members'] = members
     events = Events.query.filter_by(event_club=club_name).all()
     events = events_schema.dump(events)
+    for event in events:
+        booking = Bookings.query.filter_by(booking_id=event['event_booking_id']).first()
+        event['slot'] = booking.slot
+        event['date'] = booking.date
     result['events'] = events
     return jsonify({"info":result})
 
