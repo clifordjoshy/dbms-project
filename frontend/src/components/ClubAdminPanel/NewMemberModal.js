@@ -7,56 +7,81 @@ import axios from "axios";
 import { AppContext } from "../../App";
 
 const NewMemberModal = ({ show, onHide }) => {
-  const [email, setEmail] = useState("");
+  const [rollNumber, setRollNumber] = useState("");
+  const [position, setPosition] = useState("");
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState(false);
+  const [rollError, setRollError] = useState(false);
+  //todo use context token
+  const userToken =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
 
-  const handleAddition = useCallback(() => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@nitc.ac.in$/;
-    if (!re.test(email.toLowerCase())) {
-      setEmailError(true);
-      return;
-    }
-    setEmail("");
+  const handleAddition = useCallback(
+    (e) => {
+      e.preventDefault();
+      const roll = rollNumber.toLowerCase();
+
+      setLoading(true);
+      axios
+        .post(
+          process.env.REACT_APP_BACKEND_URL + "club_member_add",
+          { roll_no: roll, position },
+          { headers: { Authorization: `Bearer ${userToken}` } }
+        )
+        .then((res) => {
+          setLoading(false);
+          if (res.data.msg === "Member added.") {
+            onHideSub();
+          } else {
+            throw "dead";
+          }
+        })
+        .catch(() => {
+          setRollError(true);
+          setLoading(false);
+        });
+    },
+    [rollNumber, position]
+  );
+
+  const onHideSub = () => {
+    setRollNumber("");
+    setRollError(false);
+    setPosition("");
+    setLoading(false);
     onHide();
-    // setLoading(true);
-    // axios.post(process.env.REACT_APP_BACKEND_URL + "login", { username: email, password }).then((res) => {
-    //   setLoading(false);
-    //   if (res.data.access_token) {
-    //     setUserToken(res.data.access_token);
-    //     if (remember) {
-    //       setUserToken(res.data.access_token);
-    //     }
-    //     onHide();
-    //   } else {
-    //     setErrors({ login: true });
-    //   }
-    // });
-  }, [email]);
+  };
 
   return (
-    <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal onHide={onHideSub} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">New Member</Modal.Title>
-        <button className="btn-close" onClick={onHide} />
+        <button className="btn-close" onClick={onHideSub} />
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>NITC Email</Form.Label>
+          <Form.Group className="mb-3">
+            <Form.Label>Roll Number</Form.Label>
             <Form.Control
               required
-              type="email"
-              placeholder="Enter email"
+              placeholder="Enter roll number"
               onChange={(e) => {
-                setEmailError(false);
-                setEmail(e.target.value);
+                setRollError(false);
+                setRollNumber(e.target.value);
               }}
-              value={email}
-              isInvalid={emailError}
+              value={rollNumber}
+              isInvalid={rollError}
             />
           </Form.Group>
-          {emailError && <div class="alert alert-danger">Invalid user</div>}
+          {rollError && <div class="alert alert-danger">Invalid user</div>}
+          <Form.Group className="mb-3">
+            <Form.Label>Position</Form.Label>
+            <Form.Control
+              required
+              placeholder="Enter position"
+              onChange={(e) => setPosition(e.target.value)}
+              value={position}
+            />
+          </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>

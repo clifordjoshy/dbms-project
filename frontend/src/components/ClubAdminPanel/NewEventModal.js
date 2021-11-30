@@ -2,45 +2,77 @@ import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
 import axios from "axios";
 import { AppContext } from "../../App";
 
 const NewEventModal = ({ show, onHide }) => {
   const [eventName, setEventName] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
   const [eventVenue, setEventVenue] = useState("");
-  const [eventTime, setEventTime] = useState("");
+  const [slot, setSlot] = useState("Morning");
+  const [eventDate, setEventDate] = useState("");
+  const [maxLimit, setMaxLimit] = useState(100);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState(null);
 
-  const handleCreation = useCallback(() => {
-    setEventName("");
-    setEventVenue("");
-    setEventTime("");
-    onHide();
-    // setLoading(true);
-    // axios.post(process.env.REACT_APP_BACKEND_URL + "login", { username: email, password }).then((res) => {
-    //   setLoading(false);
-    //   if (res.data.access_token) {
-    //     setUserToken(res.data.access_token);
-    //     if (remember) {
-    //       setUserToken(res.data.access_token);
-    //     }
-    //     onHide();
-    //   } else {
-    //     setErrors({ login: true });
-    //   }
-    // });
+  const [venueOptions, setVenueOptions] = useState([]);
+  //todo use context token
+  const userToken =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "venues_all", { headers: { Authorization: `Bearer ${userToken}` } })
+      .then((res) => {
+        setVenueOptions(res.data.venues.map(({ venue_name }) => venue_name));
+      });
   }, []);
 
+  const handleCreation = useCallback(() => {
+    setLoading(true);
+    axios
+      .post(
+        process.env.REACT_APP_BACKEND_URL + "event_add",
+        {
+          event_name: eventName,
+          event_desc: eventDescription,
+          event_venue: eventVenue,
+          max_limit: maxLimit,
+          slot,
+          date: eventDate,
+        },
+        { headers: { Authorization: `Bearer ${userToken}` } }
+      )
+      .then((res) => {
+        setLoading(false);
+        if (res.data.event_id) {
+          onHideSub();
+        } else {
+          throw res.data.msg;
+        }
+      })
+      .catch((msg) => {
+        setError(typeof msg === "string" ? msg : "Failed");
+        setLoading(false);
+      });
+  }, [eventName, eventDescription, eventVenue, maxLimit, eventDate, slot]);
+
+  const onHideSub = () => {
+    setEventName("");
+    setEventDescription("");
+    setLoading(false);
+    onHide();
+    setError(null);
+  };
+
   return (
-    <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal onHide={onHideSub} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">New Event</Modal.Title>
-        <button className="btn-close" onClick={onHide} />
+        <button className="btn-close" onClick={onHideSub} />
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -51,43 +83,63 @@ const NewEventModal = ({ show, onHide }) => {
               placeholder="Event name goes here"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              isInvalid={errors.eventName}
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Pick Event Venue</Form.Label>
-            <Form.Select>
-              <option>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </Form.Select>
+            <Form.Label>Enter event description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows="3"
+              placeholder="Event description goes here"
+              value={eventDescription}
+              onChange={(e) => setEventDescription(e.target.value)}
+            />
           </Form.Group>
           <Row className="g-2 mb-3">
             <Col md>
-              <Form.Group>
-                <Form.Label>Enter event date</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={eventTime.slice(0, 10)}
-                  onChange={(e) => setEventTime(e.target.value + "T" + eventTime.slice(10))}
-                  isInvalid={errors.time}
-                />
+              <Form.Group className="mb-3">
+                <Form.Label>Pick Event Venue</Form.Label>
+                <Form.Select value={eventVenue} onChange={(e) => setEventVenue(e.target.value)}>
+                  {venueOptions.map((op) => (
+                    <option>{op}</option>
+                  ))}
+                </Form.Select>
               </Form.Group>
             </Col>
             <Col md>
               <Form.Group>
-                <Form.Label>Enter event time</Form.Label>
+                <Form.Label>Enter Max Regs</Form.Label>
                 <Form.Control
-                  type="time"
-                  value={eventTime.slice(11)}
-                  onChange={(e) => setEventTime(eventTime.slice(0, 10) + "T" + e.target.value)}
-                  isInvalid={errors.time}
+                  as="input"
+                  type="number"
+                  placeholder="Enter max limit"
+                  value={maxLimit}
+                  onChange={(e) => setMaxLimit(e.target.value)}
                 />
               </Form.Group>
             </Col>
           </Row>
+          <Row className="g-2 mb-3">
+            <Col md>
+              <Form.Group>
+                <Form.Label>Enter event date</Form.Label>
+                <Form.Control type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
+              </Form.Group>
+            </Col>
+            <Col md>
+              <Form.Group>
+                <Form.Label>Pick Slot</Form.Label>
+                <Form.Select value={slot} onChange={(e) => setSlot(e.target.value)}>
+                  <option value="Morning">Morning</option>
+                  <option value="Afternoon">Afternoon</option>
+                  <option value="Evening">Evening</option>
+                  <option value="Night">Night</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
         </Form>
+        {error && <div class="alert alert-danger">{error}</div>}
       </Modal.Body>
       <Modal.Footer>
         {loading && <Spinner animation="border" />}

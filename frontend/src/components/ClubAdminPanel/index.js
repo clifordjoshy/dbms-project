@@ -7,13 +7,14 @@ import expandIcon from "../../icons/expand.svg";
 import NewMemberModal from "./NewMemberModal";
 import NewEventModal from "./NewEventModal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ClubAdminPanel = () => {
-  const { userToken } = useContext(AppContext);
-  const [memberList, setMemberList] = useState([]);
-  const [eventList, setEventList] = useState([]);
+  // const { userToken } = useContext(AppContext);
+  const userToken =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
+  const [clubInfo, setClubInfo] = useState(null);
   const [description, setDescription] = useState("");
-  const [storedDes, setStoredDes] = useState("");
   const [isDeletingMembers, setIsDeletingMembers] = useState(false);
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
@@ -21,28 +22,58 @@ const ClubAdminPanel = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setDescription(
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sunt nesciunt similique eius possimus,\
-        voluptas incidunt corrupti iure animi et."
-    );
-    setStoredDes(
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sunt nesciunt similique eius possimus,\
-        voluptas incidunt corrupti iure animi et."
-    );
-    // if (!userToken) {
-    //   history.push("/");
-    // }
-    // axios
-    //   .get(process.env.REACT_APP_BACKEND_URL + pollId + "/admin", {
-    //     headers: { Authorization: `Bearer ${userToken}` },
-    //   })
-    //   .then((res) => setQuestionData(res.data))
-  }, [userToken]);
+    if (!userToken) {
+      navigate("/");
+    }
+    if (isAddingMember || isCreatingEvent) return;
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "club_info", {
+        headers: { Authorization: `Bearer ${userToken}` },
+      })
+      .then((res) => {
+        setClubInfo(res.data.info);
+        setDescription(res.data.info.club_desc);
+      });
+  }, [isAddingMember, isCreatingEvent]);
+
+  const onDescriptionUpdate = useCallback(
+    (e) => {
+      e.preventDefault();
+      axios
+        .post(
+          process.env.REACT_APP_BACKEND_URL + "club_edit",
+          {
+            club_name: clubInfo.club_name,
+            club_desc: description,
+          },
+          { headers: { Authorization: `Bearer ${userToken}` } }
+        )
+        .then((res) => {
+          setClubInfo({ ...clubInfo, club_desc: description });
+        });
+    },
+    [description, clubInfo]
+  );
+
+  const onDeleteMember = useCallback(
+    (roll_no) => {
+      axios
+        .post(
+          process.env.REACT_APP_BACKEND_URL + "club_member_delete",
+          { roll_no },
+          { headers: { Authorization: `Bearer ${userToken}` } }
+        )
+        .then(() => {
+          setClubInfo({ ...clubInfo, members: clubInfo.members.filter(({ roll_no: r }) => r !== roll_no) });
+        });
+    },
+    [clubInfo]
+  );
 
   return (
     <div className="p-4 text-white">
       <h1>
-        <b>{"Insert club name here"}</b>
+        <b>{clubInfo?.club_name}</b>
       </h1>
       <textarea
         className="form-control bg-transparent text-white"
@@ -52,9 +83,10 @@ const ClubAdminPanel = () => {
         onChange={(e) => setDescription(e.target.value)}
       />
       <Button
-        variant={storedDes == description ? "secondary" : "info"}
-        disabled={storedDes == description}
+        variant={clubInfo?.club_desc == description ? "secondary" : "info"}
+        disabled={clubInfo?.club_desc == description}
         className="float-end mt-1"
+        onClick={onDescriptionUpdate}
       >
         Save Changes
       </Button>
@@ -64,26 +96,25 @@ const ClubAdminPanel = () => {
         <div>
           <h3>Members</h3>
           <div className="overflow-auto" style={{ height: "500px" }}>
-            {[
-              "Person A",
-              "Person B",
-              "Person C",
-              "Person B",
-              "Person C",
-              "Person B",
-              "Person C",
-              // "Person B",
-              // "Person C",
-              "Person B",
-              // "Person C",
-            ].map((name) => {
+            {clubInfo?.members.map(({ name, roll_no, position }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
                   <Card.Body>
                     <Card.Title>{name}</Card.Title>
-                    <Card.Text className="float-start">B190539CS</Card.Text>
+                    <Card.Text className="float-start">
+                      {roll_no}
+                      <br />
+                      {position}
+                    </Card.Text>
                     <Card.Text className="float-end">
-                      {isDeletingMembers && <input type="image" src={trashIcon} style={{ height: "20px" }} />}
+                      {isDeletingMembers && (
+                        <input
+                          type="image"
+                          src={trashIcon}
+                          style={{ height: "20px" }}
+                          onClick={() => onDeleteMember(roll_no)}
+                        />
+                      )}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -107,22 +138,22 @@ const ClubAdminPanel = () => {
         <div>
           <h3>Events</h3>
           <div className="overflow-auto" style={{ height: "500px" }}>
-            {["Event A", "Event B"].map((name) => {
+            {clubInfo?.events.map(({ event_name, date, slot, event_id }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
                   <Card.Body>
-                    <Card.Title>{name}</Card.Title>
+                    <Card.Title>{event_name}</Card.Title>
                     <Card.Text className="float-start m-0">
-                      ECLC
+                      {date.substring(0, date.indexOf("00:00:00"))}
                       <br />
-                      Friday 10:30pm
+                      {slot}
                     </Card.Text>
                     <input
                       type="image"
                       src={expandIcon}
                       className="float-end"
                       style={{ height: "20px" }}
-                      onClick={() => navigate(`${1}`)}
+                      onClick={() => navigate(`${event_id}`)}
                     />
                   </Card.Body>
                 </Card>
