@@ -220,7 +220,7 @@ def add_club():
     club = Clubs(club_name,club_desc,hashed_password)
     db.session.add(club)
     db.session.commit()
-    return jsonify({"New club":f"{club_name}"})
+    return jsonify({"club":f"{club_name}"})
   
 @app.route("/venue_add", methods=['POST'])
 @cross_origin()
@@ -231,7 +231,7 @@ def add_venue():
     venue = Venues(venue_name)
     db.session.add(venue)
     db.session.commit()
-    return jsonify({"New venue":f"{venue_name}"})
+    return jsonify({"venue":f"{venue_name}"})
   
 @app.route("/event_register", methods=['POST'])
 @cross_origin()
@@ -260,7 +260,7 @@ def event_register():
 def events_all():
     events = Events.query.all()
     events = events_schema.dump(events)
-    return jsonify({"all events":events})
+    return jsonify({"events":events})
 
 @app.route("/events_future", methods=['GET'])
 @cross_origin()
@@ -271,7 +271,7 @@ def events_future():
         booking = Bookings.query.filter_by(booking_id=event.event_booking_id)
         if booking.date > datetime.datetime.now:
             future_events[event.event_id] = event.event_name
-    return jsonify({"all events":events})
+    return jsonify({"events":events})
 
 @app.route("/events_student", methods=['GET'])
 @cross_origin()
@@ -283,7 +283,7 @@ def events_student():
     for participation in participations:
         event = Events.query.filter_by(event_id=participation.participation_event).first()
         events[event.event_id] = event.event_name
-    return jsonify({"all events":events})
+    return jsonify({"events":events})
 
 @app.route("/clubs_all", methods=['GET'])
 @cross_origin()
@@ -291,7 +291,7 @@ def clubs_all():
     try:
         clubs = clubs.query.all()
         clubs = clubs_schema.dump(clubs)
-        return jsonify({"all clubs":clubs})
+        return jsonify({"clubs":clubs})
     except:
         return jsonify({"msg":"No clubs"})
   
@@ -302,7 +302,7 @@ def venues_all():
     try:
         venues = Venues.query.all()
         venues = venues_schema.dump(venues)
-        return jsonify({"all venues":venues})
+        return jsonify({"venues":venues})
     except:
         return jsonify({"msg":"No venues"})
   
@@ -316,7 +316,7 @@ def club_members():
     for member in members:
         name=Students.query.filter_by(roll_number=member.member_roll_number).first().name()
         member['name']=name
-    return jsonify({"Members and positions of the club are":members})
+    return jsonify({"members":members})
 
 @app.route("/registered_students", methods=['GET'])
 @cross_origin()
