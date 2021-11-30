@@ -335,7 +335,7 @@ def club_info():
     for member in members_rno:
         print(member)
         name = Students.query.filter_by(roll_number=member['member_roll_number']).first().name
-        members[member_roll_number] = name
+        members[member['member_roll_number']] = name
     result['members'] = members
     events = Events.query.filter_by(event_club=club_name).all()
     events = events_schema.dump(events)
