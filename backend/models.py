@@ -14,7 +14,7 @@ class Students(db.Model):
     def __init__(self, name, password, roll_number, email):
         self.name = name
         self.password = password
-        self.roll_number = rollNumber
+        self.roll_number = roll_number
         self.email = email
 
 class Members(db.Model):
@@ -23,7 +23,7 @@ class Members(db.Model):
     position = db.Column(db.String(50))
 
     def __init__(self, rollnumber, club, position):
-        self.rollnumber = rollnumber
+        self.member_roll_number = rollnumber
         self.club = club
         self.position = position
         
@@ -38,10 +38,10 @@ class Clubs(db.Model):
     password = db.Column(db.String(100))
     club_desc = db.Column(db.String(200))
 
-    def __init__(self, name, password, rollNumber, email):
+    def __init__(self, club_name, club_desc, password):
         self.club_name = club_name
-        self.club = club
-        self.position = position
+        self.club_desc = club_desc
+        self.password = password
 
 class ClubsSchema(ma.Schema):
     class Meta:
@@ -98,7 +98,7 @@ class Venues(db.Model):
         
 class VenuesSchema(ma.Schema):
     class Meta:
-        fields = ('venue_name')
+        fields = ('venue_name', )
 venues_schema = VenuesSchema(many=True)
 
 class SysAdmin(db.Model):

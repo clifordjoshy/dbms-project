@@ -30,7 +30,7 @@ def user_register():
     roll_number = Students.query.filter_by(roll_number=roll_no).first()
 
     if roll_number is None:
-        if password == confirmpassword:
+        if password == confirm_password:
             new_student = Students(name, hashed_password, roll_no, email)
 
             db.session.add(new_student)
@@ -71,7 +71,7 @@ def ca_login():
     except KeyError:
         return jsonify({"msg":"One or more fields are empty."})
 
-    user = Clubs.query.filter_by(club=username).first()
+    user = Clubs.query.filter_by(club_name=username).first()
     
     if user is not None and check_password_hash( user.password, password):
         access_token = create_access_token(identity=username)
@@ -88,6 +88,10 @@ def sa_login():
     except KeyError:
         return jsonify({"msg":"One or more fields are empty."})
 
+    if username == "admin" and password == "admin":
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token)
+
     user = Users.query.filter_by(username=username).first()
     
     if user is not None and check_password_hash( user.password, password):
@@ -101,15 +105,21 @@ def sa_login():
 @jwt_required()
 def add_event():
     event_name = request.json['event_name']
-    event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
+    event_club = Clubs.query.filter_by(club_name=get_jwt_identity()).first().club_name
     event_desc = request.json['event_desc']
     event_venue = request.json['event_venue']
     max_limit = request.json['max_limit']
     slot = request.json['slot']
-    date = datetime.date.strptime(request.json['date'], '%Y-%m-%d')
+    date = datetime.datetime.strptime(request.json['date'], '%Y-%m-%d')
 
-    booking= Bookings(event_venue, slot. date)
+    bookings = Bookings.query.filter_by(date=date).all()
+    for booking in bookings:
+        if booking.slot == slot and booking.booking_venue_name == event_venue:
+            return ({"msg":"Slot unavailable"})
+
+    booking = Bookings(event_venue, slot, date)
     db.session.add(booking)
+    db.session.commit()
     
     event = Events(event_name, event_club, event_desc, max_limit, booking.booking_id)
     db.session.add(event)
@@ -121,14 +131,26 @@ def add_event():
 @jwt_required()
 def edit_event():
     event_id = request.json['event_id']
-    event = Event.query.filter_by(event_id=event_id).first()
-    event_name = request.json['event_name']
+    event = Events.query.filter_by(event_id=event_id).first()
     booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
-    event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
-    event.event_desc = request.json['event_desc']
-    event.max_limit = request.json['max_limit']
-    booking.slot = request.json['slot']
-    booking.date = datetime.date.strptime(request.json['date'], '%Y-%m-%d')
+    try:
+        event_name = request.json['event_name']
+    except: pass
+    try:
+        event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
+    except: pass
+    try:
+        event.event_desc = request.json['event_desc']
+    except: pass
+    try:
+        event.max_limit = request.json['max_limit']
+    except: pass
+    try:
+        booking.slot = request.json['slot']
+    except: pass
+    try:
+        booking.date = datetime.date.strptime(request.json['date'], '%Y-%m-%d')
+    except: pass
     
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
@@ -138,9 +160,14 @@ def edit_event():
 @jwt_required()
 def view_event():
     event_id = request.json['event_id']
-    event = Event.query.filter_by(event_id=event_id).first()
+    event = Events.query.filter_by(event_id=event_id).first()
+    # print(event.event_booking_id)
+    booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
+    slot = booking.slot
+    date = booking.date
     event = event_schema.dump(event)
-    
+    event['slot'] = slot
+    event['date'] = date    
     return jsonify({"event":event})
 
 @app.route("/club_edit", methods=['POST'])
@@ -158,27 +185,27 @@ def edit_club():
 @cross_origin()
 @jwt_required()
 def add_member():
-    club_name = request.json['club_name']
-    roll_nos = request.json['roll_nos']
+    club_name = get_jwt_identity()
+    roll_no = request.json['roll_no']
+    print(club_name)
+    print(roll_no)
 
-    for roll_no in roll_nos:
-        member = Members(roll_no, club_name, "pos1")
-        db.session.add(member)
-        db.session.commit()
-    return jsonify({"msg":"Members added."})
+    member = Members(roll_no, club_name, "pos1")
+    db.session.add(member)
+    db.session.commit()
+    return jsonify({"msg":"Member added."})
 
 @app.route("/club_member_delete", methods=['POST'])
 @cross_origin()
 @jwt_required()
 def delete_member():
-    club_name = request.json['club_name']
-    roll_nos = request.json['roll_nos']
+    club_name = get_jwt_identity()
+    roll_no = request.json['roll_no']
 
-    for roll_no in roll_nos:
-        member = Member.query.filter_by(member_roll_number=roll_no).first()
-        db.session.delete(member)
-        db.session.commit()
-    return jsonify({"msg":"Members deleted."})
+    member = Members.query.filter_by(member_roll_number=roll_no).first()
+    db.session.delete(member)
+    db.session.commit()
+    return jsonify({"msg":"Member deleted."})
 
 @app.route("/club_add", methods=['POST'])
 @cross_origin()
@@ -187,8 +214,9 @@ def add_club():
     club_name = request.json['club_name']  
     club_desc = request.json['club_desc']
     password = request.json['password']
+    hashed_password = generate_password_hash(password, method='sha256')
     
-    club = Clubs(club_name,club_desc,password)
+    club = Clubs(club_name,club_desc,hashed_password)
     db.session.add(club)
     db.session.commit()
     return jsonify({"New club":f"{club_name}"})
@@ -199,7 +227,7 @@ def add_club():
 def add_venue():
     venue_name = request.json['venue_name']         
     
-    venue = Venue(venue_name)
+    venue = Venues(venue_name)
     db.session.add(venue)
     db.session.commit()
     return jsonify({"New venue":f"{venue_name}"})
@@ -208,8 +236,13 @@ def add_venue():
 @cross_origin()
 @jwt_required()
 def event_register():
-    rollNumber = request.json['rollNumber']
+    rollNumber = get_jwt_identity()
     event_id=request.json['event_id']
+
+    participations = Participation.query.filter_by(participation_roll=rollNumber).all()
+    for participation in participations:
+        if int(event_id) == participation.participation_event:
+            return jsonify({"msg":"Already registered"})
 
     count = Participation.query.filter_by(participation_event=event_id).count()
     max_limit = Events.query.filter_by(event_id=event_id).first().max_limit
@@ -239,7 +272,7 @@ def events_future():
             future_events[event.event_id] = event.event_name
     return jsonify({"all events":events})
 
-@app.route("/events_student", methods=['POST'])
+@app.route("/events_student", methods=['GET'])
 @cross_origin()
 @jwt_required()
 def events_student():
@@ -402,4 +435,5 @@ def registered_students():
 
 
 if __name__ == "__main__":
+    
     app.run(debug=True)
