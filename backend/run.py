@@ -174,8 +174,8 @@ def view_event():
 @cross_origin()
 @jwt_required()
 def edit_club():
-    club_name = request.json['club_name']
-    club = Event.query.filter_by(club_name=club_name).first()
+    club_name = get_jwt_identity()
+    club = Events.query.filter_by(club_name=club_name).first()
     club.club_desc = request.json['club_desc']
     
     db.session.commit()
