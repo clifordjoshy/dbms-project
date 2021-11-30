@@ -87,7 +87,7 @@ recieve: all venues
 GET
 recieve: members of club administered by current user(ca)
 
-registered_students
+/registered_students
 GET
 send: event_id
 recieve: all participants
