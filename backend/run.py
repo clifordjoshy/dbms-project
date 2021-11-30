@@ -175,11 +175,13 @@ def view_event():
 @jwt_required()
 def edit_club():
     club_name = get_jwt_identity()
-    club = Events.query.filter_by(club_name=club_name).first()
+    print(club_name)
+    club = Clubs.query.filter_by(club_name=club_name).first()
+    print(club)
+    club.club_name = request.json['club_name']
     club.club_desc = request.json['club_desc']
-    
     db.session.commit()
-    return jsonify({"club":f"{club_name}"})
+    return jsonify({"msg":"Edited"})
 
 @app.route("/club_member_add", methods=['POST'])
 @cross_origin()
@@ -289,7 +291,7 @@ def events_student():
 @cross_origin()
 def clubs_all():
     try:
-        clubs = clubs.query.all()
+        clubs = Clubs.query.all()
         clubs = clubs_schema.dump(clubs)
         return jsonify({"clubs":clubs})
     except:
