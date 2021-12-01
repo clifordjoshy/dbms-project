@@ -27,7 +27,7 @@ const ClubAdminPanel = () => {
     }
     if (isAddingMember || isCreatingEvent) return;
     axios
-      .get(process.env.REACT_APP_BACKEND_URL + "club_info", {
+      .get(process.env.REACT_APP_BACKEND_URL + "/clubs/<club_name>", {
         headers: { Authorization: `Bearer ${userToken}` },
       })
       .then((res) => {
