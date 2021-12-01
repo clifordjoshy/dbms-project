@@ -167,7 +167,8 @@ def view_event():
     date = booking.date
     event = event_schema.dump(event)
     event['slot'] = slot
-    event['date'] = date    
+    event['date'] = date
+    event['venue'] = booking.booking_venue_name
     return jsonify({"event":event})
 
 @app.route("/club_edit", methods=['POST'])
