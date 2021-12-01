@@ -35,38 +35,38 @@ const StudentSignUpModal = ({ show, onHide }) => {
     }
 
     const req = {
-        "name": name,
-        "roll_no": rollNo,
-        "email": email,
-        "password": password,
-        "confirm_password": c_password
+      name: name,
+      roll_no: rollNo,
+      email: email,
+      password: password,
+      confirm_password: c_password,
     };
 
     console.log(req);
 
-    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "register", {
-        "name": name,
-        "roll_no": rollNo,
-        "email": email,
-        "password": password,
-        "confirm_password": c_password
-    },
-    ).then((res) => {
-      setLoading(false);
-      if (res.data.access_token) {
-        setUserToken(res.data.access_token);
-        setUserType('student');
-        if (remember) {
+    axios
+      .post(process.env.REACT_APP_BACKEND_URL + "register", {
+        name: name,
+        roll_no: rollNo,
+        email: email,
+        password: password,
+        confirm_password: c_password,
+      })
+      .then((res) => {
+        setLoading(false);
+        if (res.data.access_token) {
           setUserToken(res.data.access_token);
-          setUserType('student');
+          setUserType("student");
+          if (remember) {
+            localStorage.setItem("userToken", res.data.access_token);
+            localStorage.setItem("userType", "student");
+          }
+          onHide();
+        } else {
+          setErrors({ login: true });
         }
-        onHide();
-      } else {
-        setErrors({ login: true });
-      }
-    });
+      });
   }, [email, password, c_password, name, rollNo, remember, onHide, setUserToken]);
 
   return (
@@ -77,8 +77,7 @@ const StudentSignUpModal = ({ show, onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-
-        <Form.Group className="mb-3" controlId="formBasicName">
+          <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Name</Form.Label>
             <Form.Control
               required

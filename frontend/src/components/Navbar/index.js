@@ -3,11 +3,10 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import BootstrapNavbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState  } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../App";
-import LoginModal from "./LoginModal";
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 import StudentLoginModal from "./Modals/StudentLoginModal";
 import CALoginModal from "./Modals/CAModal";
 import SALoginModal from "./Modals/SAModal";
@@ -28,16 +27,15 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  
-
   useEffect(() => {
-    axios.get(process.env.REACT_APP_BACKEND_URL + "clubs_all", {
-      header: {Authorization: 'Bearer ${userToken}'},
-    })
-    .then((res) => {
-      console.log(res.data.clubs);
-      setClubs(res.data.clubs);
-    })
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "clubs_all", {
+        header: { Authorization: `Bearer ${userToken}` },
+      })
+      .then((res) => {
+        console.log(res.data.clubs);
+        setClubs(res.data.clubs);
+      });
   }, [clubs]);
 
   let navOptions;
@@ -45,37 +43,30 @@ const Navbar = () => {
     navOptions = (
       <>
         <NavDropdown title="Clubs" id="basic-nav-dropdown">
-          {clubs && clubs.map((club) => (
-            <NavDropdown.Item onClick={() => navigate(`clubs/${club.club_name}`)}>{club.club_name}</NavDropdown.Item>
-          ))}
+          {clubs &&
+            clubs.map((club) => (
+              <NavDropdown.Item onClick={() => navigate(`clubs/${club.club_name}`)}>{club.club_name}</NavDropdown.Item>
+            ))}
         </NavDropdown>
-        <Nav.Link>
-          Events
-        </Nav.Link>
+        <Nav.Link>Events</Nav.Link>
         <DropdownButton id="dropdown-basic-button" title="Sign In">
-          <Dropdown.Item onClick ={() => setShowSLoginModal(true)}>Student</Dropdown.Item>
-          <Dropdown.Item onClick = {() => setShowCALoginModal(true)}>Club Admin</Dropdown.Item>
-          <Dropdown.Item onClick = {() => setShowSALoginModal(true)}>System Admin</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowSLoginModal(true)}>Student</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowCALoginModal(true)}>Club Admin</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowSALoginModal(true)}>System Admin</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick = {() => setShowSSignUpModal(true)}>Student Register</Dropdown.Item>
+          <Dropdown.Item onClick={() => setShowSSignUpModal(true)}>Student Register</Dropdown.Item>
         </DropdownButton>
       </>
     );
   } else {
-
-    if(userType === 'SA'){ //for SA users
+    if (userType === "SA") {
+      //for SA users
       console.log(userToken);
       navOptions = (
         <>
-          <Nav.Link onClick={() => navigate('/admin')}>
-          Home
-          </Nav.Link>
-          <Nav.Link onClick={() => navigate('/admin/createvenue')}>
-          Add Venues
-          </Nav.Link>
-          <Nav.Link onClick={() => navigate('/admin/createclub')}>
-          Add Clubs
-          </Nav.Link>
+          <Nav.Link onClick={() => navigate("/admin")}>Home</Nav.Link>
+          <Nav.Link onClick={() => navigate("/admin/createvenue")}>Add Venues</Nav.Link>
+          <Nav.Link onClick={() => navigate("/admin/createclub")}>Add Clubs</Nav.Link>
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {
@@ -83,7 +74,7 @@ const Navbar = () => {
               localStorage.removeItem("userType");
               setUserToken(null);
               setUserType(null);
-              navigate('/');
+              navigate("/");
             }}
           >
             Log Out
@@ -91,17 +82,12 @@ const Navbar = () => {
           {/* add other options based on user type */}
         </>
       );
-    }
-
-    else if (userType === "student"){ //For student users
+    } else if (userType === "student") {
+      //For student users
       navOptions = (
         <>
-          <Nav.Link onClick={() => navigate(`/student`)}>
-          Student Details
-          </Nav.Link>
-          <Nav.Link onClick={() => navigate(`/events`)}>
-          All Events
-          </Nav.Link>
+          <Nav.Link onClick={() => navigate(`/student`)}>Student Details</Nav.Link>
+          <Nav.Link onClick={() => navigate(`/events`)}>All Events</Nav.Link>
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {
@@ -109,29 +95,19 @@ const Navbar = () => {
               localStorage.removeItem("userType");
               setUserToken(null);
               setUserType(null);
-              navigate('/');
+              navigate("/");
             }}
           >
             Log Out
           </Nav.Link>
-         
         </>
       );
-    }
-
-    else{ //for CA users
+    } else {
+      //for CA users
       console.log(userType);
       navOptions = (
         <>
-          {/* <Nav.Link onClick={() => navigate(`/${userType}`)}>
-          Home
-          </Nav.Link>
-          <Nav.Link onClick={() => navigate(`/${userType}/editDetails`)}>
-          Edit Details
-          </Nav.Link>
-          <Nav.Link onClick={() => navigate(`${userType}/events`)}>
-          Events
-          </Nav.Link> */}
+          <Nav.Link onClick={() => navigate(`/clubadmin`)}>View Club Info</Nav.Link>
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {
@@ -139,16 +115,14 @@ const Navbar = () => {
               localStorage.removeItem("userType");
               setUserToken(null);
               setUserType(null);
-              navigate('/');
+              navigate("/");
             }}
           >
             Log Out
           </Nav.Link>
-          
         </>
       );
     }
-    
   }
 
   return (
@@ -167,7 +141,7 @@ const Navbar = () => {
       </BootstrapNavbar>
       {!userToken && <StudentLoginModal show={showSLoginModal} onHide={() => setShowSLoginModal(false)} />}
       {!userToken && <StudentSignUpModal show={showSSignUpModal} onHide={() => setShowSSignUpModal(false)} />}
-      {!userToken && <CALoginModal show={showCALoginModal} onHide={() => setShowCALoginModal(false)} clubs={clubs}/>}
+      {!userToken && <CALoginModal show={showCALoginModal} onHide={() => setShowCALoginModal(false)} clubs={clubs} />}
       {!userToken && <SALoginModal show={showSALoginModal} onHide={() => setShowSALoginModal(false)} />}
     </>
   );

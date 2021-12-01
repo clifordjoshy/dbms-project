@@ -26,22 +26,23 @@ const StudentLoginModal = ({ show, onHide }) => {
       return;
     }
 
-    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "login/student", { 'roll_no': rollNo, 'password': password }).then((res) => {
-      setLoading(false);
-      if (res.data.access_token) {
-        setUserToken(res.data.access_token);
-        setUserType('student');
-        if (remember) {
+    axios
+      .post(process.env.REACT_APP_BACKEND_URL + "login/student", { roll_no: rollNo, password: password })
+      .then((res) => {
+        setLoading(false);
+        if (res.data.access_token) {
           setUserToken(res.data.access_token);
-          setUserType('student');
+          setUserType("student");
+          if (remember) {
+            localStorage.setItem("userToken", res.data.access_token);
+            localStorage.setItem("userType", "student");
+          }
+          onHide();
+        } else {
+          setErrors({ login: true });
         }
-        onHide();
-      } else {
-        setErrors({ login: true });
-      }
-    });
+      });
   }, [rollNo, password, remember, onHide, setUserToken]);
 
   return (

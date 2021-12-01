@@ -17,7 +17,7 @@ const SALoginModal = ({ show, onHide }) => {
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
-    
+
     if (password.length < 4) {
       errorsNew.password = true;
     }
@@ -27,22 +27,23 @@ const SALoginModal = ({ show, onHide }) => {
       return;
     }
 
-    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "login/sa", { 'username': username, 'password': password }).then((res) => {
-      setLoading(false);
-      if (res.data.access_token) {
-        setUserToken(res.data.access_token);
-        setUserType('SA');
-        if (remember) {
+    axios
+      .post(process.env.REACT_APP_BACKEND_URL + "login/sa", { username: username, password: password })
+      .then((res) => {
+        setLoading(false);
+        if (res.data.access_token) {
           setUserToken(res.data.access_token);
-          setUserType('SA');
+          setUserType("SA");
+          if (remember) {
+            localStorage.setItem("userToken", res.data.access_token);
+            localStorage.setItem("userType", "SA");
+          }
+          onHide();
+        } else {
+          setErrors({ login: true });
         }
-        onHide();
-      } else {
-        setErrors({ login: true });
-      }
-    });
+      });
   }, [username, password, remember, onHide, setUserToken]);
 
   return (

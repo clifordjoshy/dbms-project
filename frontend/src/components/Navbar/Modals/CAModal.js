@@ -6,7 +6,7 @@ import { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../../../App";
 
-const CALoginModal = ({ show, onHide, clubs}) => {
+const CALoginModal = ({ show, onHide, clubs }) => {
   const [club, setClub] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
@@ -17,7 +17,7 @@ const CALoginModal = ({ show, onHide, clubs}) => {
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
-    
+
     if (password.length < 6) {
       errorsNew.password = true;
     }
@@ -27,16 +27,15 @@ const CALoginModal = ({ show, onHide, clubs}) => {
       return;
     }
 
-    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "login/ca", { 'club_name': club, 'password': password }).then((res) => {
+    axios.post(process.env.REACT_APP_BACKEND_URL + "login/ca", { club_name: club, password: password }).then((res) => {
       setLoading(false);
       if (res.data.access_token) {
         setUserToken(res.data.access_token);
-        setUserType(club);
+        setUserType("CA");
         if (remember) {
-          setUserToken(res.data.access_token);
-          setUserType(club);
+          localStorage.setItem("userToken", res.data.access_token);
+          localStorage.setItem("userType", "CA");
         }
         onHide();
       } else {
@@ -56,11 +55,9 @@ const CALoginModal = ({ show, onHide, clubs}) => {
           <Form.Group className="mb-3" controlId="formBasicClub">
             <Form.Label>Club Name</Form.Label>
             <Form.Select required onChange={(e) => setClub(e.target.value)} value={club} aria-label="select club">
-            <option>Choose Club</option>
-            {!clubs && <option value="">No clubs available</option>}
-            {clubs && clubs.map((club) => (
-              <option value={club.club_name}>{club.club_name}</option>
-            ))}
+              <option>Choose Club</option>
+              {!clubs && <option value="">No clubs available</option>}
+              {clubs && clubs.map((club) => <option value={club.club_name}>{club.club_name}</option>)}
             </Form.Select>
           </Form.Group>
 
