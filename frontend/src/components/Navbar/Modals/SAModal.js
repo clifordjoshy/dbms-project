@@ -44,7 +44,7 @@ const SALoginModal = ({ show, onHide }) => {
           setErrors({ login: true });
         }
       });
-  }, [username, password, remember, onHide, setUserToken]);
+  }, [username, password, remember, onHide, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

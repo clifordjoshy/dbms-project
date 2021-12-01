@@ -1,5 +1,4 @@
 import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import BootstrapNavbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +35,7 @@ const Navbar = () => {
         console.log(res.data.clubs);
         setClubs(res.data.clubs);
       });
-  }, []);
+  }, [userToken]);
 
   let navOptions;
   if (!userToken) {

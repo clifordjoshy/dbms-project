@@ -13,6 +13,14 @@ const NewMemberModal = ({ show, onHide }) => {
   const [rollError, setRollError] = useState(false);
   const { userToken } = useContext(AppContext);
 
+  const onHideSub = useCallback(() => {
+    setRollNumber("");
+    setRollError(false);
+    setPosition("");
+    setLoading(false);
+    onHide();
+  }, [setRollNumber, setRollError, setPosition, setLoading, onHide]);
+
   const handleAddition = useCallback(
     (e) => {
       e.preventDefault();
@@ -30,6 +38,7 @@ const NewMemberModal = ({ show, onHide }) => {
           if (res.data.msg === "Member added.") {
             onHideSub();
           } else {
+            // eslint-disable-next-line
             throw "dead";
           }
         })
@@ -38,16 +47,8 @@ const NewMemberModal = ({ show, onHide }) => {
           setLoading(false);
         });
     },
-    [rollNumber, position]
+    [rollNumber, position, onHideSub, userToken]
   );
-
-  const onHideSub = () => {
-    setRollNumber("");
-    setRollError(false);
-    setPosition("");
-    setLoading(false);
-    onHide();
-  };
 
   return (
     <Modal onHide={onHideSub} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

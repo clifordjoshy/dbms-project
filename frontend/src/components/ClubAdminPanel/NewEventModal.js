@@ -27,7 +27,15 @@ const NewEventModal = ({ show, onHide }) => {
       .then((res) => {
         setVenueOptions(res.data.venues.map(({ venue_name }) => venue_name));
       });
-  }, []);
+  }, [userToken]);
+
+  const onHideSub = useCallback(() => {
+    setEventName("");
+    setEventDescription("");
+    setLoading(false);
+    onHide();
+    setError(null);
+  }, [setEventName, setEventDescription, setLoading, onHide, setError]);
 
   const handleCreation = useCallback(() => {
     setLoading(true);
@@ -56,15 +64,7 @@ const NewEventModal = ({ show, onHide }) => {
         setError(typeof msg === "string" ? msg : "Failed");
         setLoading(false);
       });
-  }, [eventName, eventDescription, eventVenue, maxLimit, eventDate, slot]);
-
-  const onHideSub = () => {
-    setEventName("");
-    setEventDescription("");
-    setLoading(false);
-    onHide();
-    setError(null);
-  };
+  }, [eventName, eventDescription, eventVenue, maxLimit, eventDate, slot, userToken, onHideSub]);
 
   return (
     <Modal onHide={onHideSub} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

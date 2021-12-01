@@ -32,7 +32,7 @@ const ClubAdminPanel = () => {
         setClubInfo(res.data.info);
         setDescription(res.data.info.club_desc);
       });
-  }, [isAddingMember, isCreatingEvent]);
+  }, [isAddingMember, isCreatingEvent, navigate, userToken]);
 
   const onDescriptionUpdate = useCallback(
     (e) => {
@@ -50,7 +50,7 @@ const ClubAdminPanel = () => {
           setClubInfo({ ...clubInfo, club_desc: description });
         });
     },
-    [description, clubInfo]
+    [description, clubInfo, userToken]
   );
 
   const onDeleteMember = useCallback(
@@ -65,7 +65,7 @@ const ClubAdminPanel = () => {
           setClubInfo({ ...clubInfo, members: clubInfo.members.filter(({ roll_no: r }) => r !== roll_no) });
         });
     },
-    [clubInfo]
+    [clubInfo, userToken]
   );
 
   return (
@@ -81,8 +81,8 @@ const ClubAdminPanel = () => {
         onChange={(e) => setDescription(e.target.value)}
       />
       <Button
-        variant={clubInfo?.club_desc == description ? "secondary" : "info"}
-        disabled={clubInfo?.club_desc == description}
+        variant={clubInfo?.club_desc === description ? "secondary" : "info"}
+        disabled={clubInfo?.club_desc === description}
         className="float-end mt-1"
         onClick={onDescriptionUpdate}
       >
@@ -107,6 +107,7 @@ const ClubAdminPanel = () => {
                     <Card.Text className="float-end">
                       {isDeletingMembers && (
                         <input
+                          alt="delete"
                           type="image"
                           src={trashIcon}
                           style={{ height: "20px" }}
@@ -147,6 +148,7 @@ const ClubAdminPanel = () => {
                       {slot}
                     </Card.Text>
                     <input
+                      alt="expand"
                       type="image"
                       src={expandIcon}
                       className="float-end"

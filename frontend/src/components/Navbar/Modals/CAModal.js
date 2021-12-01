@@ -42,7 +42,7 @@ const CALoginModal = ({ show, onHide, clubs }) => {
         setErrors({ login: true });
       }
     });
-  }, [club, password, remember, onHide, setUserToken]);
+  }, [club, password, remember, onHide, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
