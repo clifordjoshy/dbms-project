@@ -395,7 +395,7 @@ def student_details():
     rollNumber=get_jwt_identity()
     student=Students.query.filter_by(roll_number=rollNumber).first()
     student=student_schema.dump(student)
-    return jsonify({"Details are:":student})
+    return jsonify({"msg":student})
   
   
 
