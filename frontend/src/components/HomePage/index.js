@@ -1,16 +1,9 @@
 // should show all the common data like info about clubs
 // list of all events
 //should not need auth.
-
-import { useContext, useState } from "react";
-import { AppContext } from "../../App";
 import background from "./background.jpg";
 
 const HomePage = () => {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
-  const { userToken, setUserToken } = useContext(AppContext);
-
   return (
     <>
       <div

@@ -43,7 +43,7 @@ const StudentLoginModal = ({ show, onHide }) => {
           setErrors({ login: true });
         }
       });
-  }, [rollNo, password, remember, onHide, setUserToken]);
+  }, [rollNo, password, remember, onHide, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

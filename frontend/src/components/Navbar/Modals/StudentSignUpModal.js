@@ -67,7 +67,7 @@ const StudentSignUpModal = ({ show, onHide }) => {
           setErrors({ login: true });
         }
       });
-  }, [email, password, c_password, name, rollNo, remember, onHide, setUserToken]);
+  }, [email, password, c_password, name, rollNo, remember, onHide, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
