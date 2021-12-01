@@ -381,11 +381,11 @@ def club_info_student(club_name):
 def registered_students():
     club_name= get_jwt_identity()
     event_id = request.json['event_id']
-    participants = {}
+    participants = []
     participations = Participation.query.filter_by(participation_event=event_id).all()
     for participation in participations:
         participant = Students.query.filter_by(roll_number=participation.participation_roll).first()
-        participants[participant.roll_number] = participant.name
+        participants.append({'roll_no' : participant.roll_number, 'name' : participant.name})
     return jsonify({"participants":participants})
 
 # @app.route("/all_questions", methods=['GET'])
