@@ -46,7 +46,7 @@ const Navbar = () => {
       <>
         <NavDropdown title="Clubs" id="basic-nav-dropdown">
           {clubs && clubs.map((club) => (
-            <NavDropdown.Item onClick={() => navigate(`/${club.club_name}`)}>{club.club_name}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => navigate(`clubs/${club.club_name}`)}>{club.club_name}</NavDropdown.Item>
           ))}
         </NavDropdown>
         <Nav.Link>
@@ -93,9 +93,15 @@ const Navbar = () => {
       );
     }
 
-    else if(userType === 'CA'){ //for CA users
+    else if (userType === "student"){ //For student users
       navOptions = (
         <>
+          <Nav.Link onClick={() => navigate(`/student`)}>
+          Student Details
+          </Nav.Link>
+          <Nav.Link onClick={() => navigate(`/events`)}>
+          All Events
+          </Nav.Link>
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {
@@ -108,13 +114,24 @@ const Navbar = () => {
           >
             Log Out
           </Nav.Link>
-          {/* add other options based on user type */}
+         
         </>
       );
     }
-    else{ //For student users
+
+    else{ //for CA users
+      console.log(userType);
       navOptions = (
         <>
+          {/* <Nav.Link onClick={() => navigate(`/${userType}`)}>
+          Home
+          </Nav.Link>
+          <Nav.Link onClick={() => navigate(`/${userType}/editDetails`)}>
+          Edit Details
+          </Nav.Link>
+          <Nav.Link onClick={() => navigate(`${userType}/events`)}>
+          Events
+          </Nav.Link> */}
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {
@@ -127,10 +144,11 @@ const Navbar = () => {
           >
             Log Out
           </Nav.Link>
-          {/* add other options based on user type */}
+          
         </>
       );
     }
+    
   }
 
   return (

@@ -11,6 +11,7 @@ import SysAdminMakeClub from "./components/SysClubPanel";
 import SysAdminMakeVenue from "./components/SysVenuePanel";
 import HomePage from "./components/HomePage";
 import ClubEventPanel from "./components/ClubEventPanel";
+import StudentDetails from "./components/StudentDetails";
 
 export const AppContext = createContext();
 
@@ -25,9 +26,10 @@ function App() {
         <Routes>
           {/* for unauthenticated users. contains all common data*/}
           <Route path="/" element={<HomePage />} />
-          <Route path="/:clubname" element={<ClubDetailsPanel />} />
+          <Route path="/clubs/:clubname" element={<ClubDetailsPanel />} />
           {/* see all events + registered events as student */}
           <Route path="/events" element={<StudentEvents />} />
+          <Route path="/student" element={<StudentDetails />} />
           {/* club admin page */}
           <Route path="/clubadmin" element={<ClubAdminPanel />} />
           {/* club admin see data for an event */}

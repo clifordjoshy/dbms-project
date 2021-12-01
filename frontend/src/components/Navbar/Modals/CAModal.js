@@ -13,7 +13,7 @@ const CALoginModal = ({ show, onHide, clubs}) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const { setUserToken } = useContext(AppContext);
+  const { setUserToken, setUserType } = useContext(AppContext);
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
@@ -33,8 +33,10 @@ const CALoginModal = ({ show, onHide, clubs}) => {
       setLoading(false);
       if (res.data.access_token) {
         setUserToken(res.data.access_token);
+        setUserType(club);
         if (remember) {
           setUserToken(res.data.access_token);
+          setUserType(club);
         }
         onHide();
       } else {

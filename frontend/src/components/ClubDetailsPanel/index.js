@@ -1,12 +1,13 @@
 import Card from "react-bootstrap/Card";
-import {useEffect, useState } from "react";
+import {useContext, useEffect, useState } from "react";
 import expandIcon from "../../icons/expand.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../App";
 
 const ClubDetailsPanel = () => {
     const [clubInfo, setClubInfo] = useState(null);
-    const userToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
+    const {userToken} = useContext(AppContext);
     const navigate = useNavigate();
 
     useEffect(() => {
