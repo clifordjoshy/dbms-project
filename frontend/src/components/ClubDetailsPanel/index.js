@@ -10,13 +10,11 @@ const ClubDetailsPanel = () => {
   const [clubInfo, setClubInfo] = useState(null);
 
   useEffect(() => {
-    console.log('hollaaa');
-    console.log(clubname);
+
     axios
       .get(process.env.REACT_APP_BACKEND_URL + `clubs/${clubname}`)
       .then((res) => {
         setClubInfo(res.data.info);
-        console.log(res.data.info);
       });
   });
 

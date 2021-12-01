@@ -14,33 +14,36 @@ const StudentDetails = () => {
     const [events, setEvents] = useState([]);
     const { userToken } = useContext(AppContext);
 
-    // useEffect(() => {
-    //     axios
-    //   .get(process.env.REACT_APP_BACKEND_URL + "club_info", {
-    //     headers: { Authorization: `Bearer ${userToken}` },
-    //   })
-    //   .then((res) => {
-    //     setClubInfo(res.data.info);
-    //     setDescription(res.data.info.club_desc);
-    //   });
-    // });
+   
 
     useEffect(() => {
-        axios
-      .get(process.env.REACT_APP_BACKEND_URL + "/events_student", {
+
+      console.log(`StudDetails ${userToken}`);
+      
+      axios
+      .post(process.env.REACT_APP_BACKEND_URL + "student_details", {
         headers: { Authorization: `Bearer ${userToken}` },
       })
       .then((res) => {
-        setEvents(res.data.events);
-        console.log(res.data.events);
+        setStudent(res.data.msg);
+        console.log(res.data);
       });
-    },[events]);
+
+      //   axios
+      // .get(process.env.REACT_APP_BACKEND_URL + "events_student", {
+      //   headers: { Authorization: `Bearer ${userToken}` },
+      // })
+      // .then((res) => {
+      //   setEvents(res.data.events);
+      //   console.log(res.data.events);
+      // });
+    },[student]);
 
     return (
       <>
         <Card style={{ width: '18rem' }}>
         <Card.Body>
-            <Card.Title>Student Details</Card.Title>
+            <Card.Title></Card.Title>
             <Card.Text>
             With supporting text below as a natural lead-in to additional content.
             </Card.Text>

@@ -33,7 +33,6 @@ const Navbar = () => {
         header: { Authorization: `Bearer ${userToken}` },
       })
       .then((res) => {
-        console.log(res.data.clubs);
         setClubs(res.data.clubs);
       });
   }, [clubs]);
@@ -62,7 +61,6 @@ const Navbar = () => {
   } else {
     if (userType === "SA") {
       //for SA users
-      console.log(userToken);
       navOptions = (
         <>
           <Nav.Link onClick={() => navigate("/admin")}>Home</Nav.Link>
@@ -105,7 +103,6 @@ const Navbar = () => {
       );
     } else {
       //for CA users
-      console.log(userType);
       navOptions = (
         <>
           <Nav.Link onClick={() => navigate(`/clubadmin`)}>View Club Info</Nav.Link>
