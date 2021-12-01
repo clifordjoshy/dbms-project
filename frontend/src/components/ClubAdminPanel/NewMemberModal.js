@@ -11,9 +11,7 @@ const NewMemberModal = ({ show, onHide }) => {
   const [position, setPosition] = useState("");
   const [loading, setLoading] = useState(false);
   const [rollError, setRollError] = useState(false);
-  //todo use context token
-  const userToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
+  const { userToken } = useContext(AppContext);
 
   const handleAddition = useCallback(
     (e) => {
