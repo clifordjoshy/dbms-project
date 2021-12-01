@@ -336,7 +336,6 @@ def club_info():
 
 @app.route("/clubs/<club_name>", methods=['GET'])
 @cross_origin()
-@jwt_required()
 def club_info_student(club_name):
     try:
         club = Clubs.query.filter_by(club_name=club_name).first()
