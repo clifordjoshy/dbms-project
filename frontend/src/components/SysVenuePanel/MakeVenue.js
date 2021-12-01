@@ -13,13 +13,14 @@ const VenueAddModal = () => {
   const contextInfo = useContext(AppContext);
   const navigate = useNavigate();
 
-  const handleCreate = useCallback(() => 
-    {
+  const handleCreate = useCallback(
+    (e) => {
+      e.preventDefault();
       axios
         .post(
           process.env.REACT_APP_BACKEND_URL + "venue_add",
           {
-            venue_name: name,
+            venue_name: name
           },
           { headers: { Authorization: `Bearer ${contextInfo.userToken}` } }
         )
