@@ -1,15 +1,42 @@
-// shows a list of events the student is yet to register for
-//shows list of events student has registered for
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { AppContext } from '../../App';
+import axios from 'axios';
 
 const StudentEvents = () => {
-  return (
-    <>
-      <h1>Student Events Page</h1>
-      <h1>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sunt nesciunt similique eius possimus,
-        voluptas incidunt corrupti iure animi et.
-      </h1>
-    </>
-  );
-};
-export default StudentEvents;
+    const [events, setEvents] = useState([]);
+    const { userToken } = useContext(AppContext);
+
+   
+
+    useEffect(() => {
+      console.log(`StudDetails ${userToken}`);
+      
+      axios
+      .get(process.env.REACT_APP_BACKEND_URL + "events_all")
+      .then((res) => {
+        setEvents(res.data.events);
+        console.log(res.data.events);
+      });
+    },[events]);
+
+    return (
+      <>
+        {events.length === 0 && <p>no registered events</p>}
+        {events.length > 0 && events.map((event)=> (
+            <Card style={{ width: '18rem' }}>
+            <Card.Body>
+              <Card.Title>{event.event_name}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{event.event_club}</Card.Subtitle>
+              <Card.Text>
+                {`${event.event_desc}\n\nMax Participation Limit: ${event.max_limit}`}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        ))}
+      </>
+    );
+  };
+  export default StudentEvents;

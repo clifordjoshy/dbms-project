@@ -20,23 +20,23 @@ const StudentDetails = () => {
 
       console.log(`StudDetails ${userToken}`);
       
-      axios
-      .post(process.env.REACT_APP_BACKEND_URL + "student_details", {
-        headers: { Authorization: `Bearer ${userToken}` },
-      })
-      .then((res) => {
-        setStudent(res.data.msg);
-        console.log(res.data);
-      });
-
-      //   axios
-      // .get(process.env.REACT_APP_BACKEND_URL + "events_student", {
+      // axios
+      // .post(process.env.REACT_APP_BACKEND_URL + "student_details", {
       //   headers: { Authorization: `Bearer ${userToken}` },
       // })
       // .then((res) => {
-      //   setEvents(res.data.events);
-      //   console.log(res.data.events);
+      //   setStudent(res.data.msg);
+      //   console.log(res.data);
       // });
+
+        axios
+      .get(process.env.REACT_APP_BACKEND_URL + "events_student", {
+        headers: { Authorization: `Bearer ${userToken}` },
+      })
+      .then((res) => {
+        setEvents(res.data.events);
+        console.log(res.data.events);
+      });
     },[student]);
 
     return (

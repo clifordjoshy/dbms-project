@@ -48,7 +48,7 @@ const Navbar = () => {
               <NavDropdown.Item onClick={() => navigate(`clubs/${club.club_name}`)}>{club.club_name}</NavDropdown.Item>
             ))}
         </NavDropdown>
-        <Nav.Link>Events</Nav.Link>
+        <Nav.Link onClick={() => navigate('/events')}>Events</Nav.Link>
         <DropdownButton id="dropdown-basic-button" title="Sign In">
           <Dropdown.Item onClick={() => setShowSLoginModal(true)}>Student</Dropdown.Item>
           <Dropdown.Item onClick={() => setShowCALoginModal(true)}>Club Admin</Dropdown.Item>
