@@ -25,7 +25,7 @@ function App() {
         <Routes>
           {/* for unauthenticated users. contains all common data*/}
           <Route path="/" element={<HomePage />} />
-          <Route path="/:clubname" element={<ClubDetailsPanel />} />
+          <Route path="/clubs/:clubname" element={<ClubDetailsPanel />} />
           {/* see all events + registered events as student */}
           <Route path="/events" element={<StudentEvents />} />
           {/* club admin page */}
