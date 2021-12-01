@@ -15,7 +15,9 @@ const ClubAdminPanel = () => {
   const [description, setDescription] = useState("");
   const [isDeletingMembers, setIsDeletingMembers] = useState(false);
   const [isAddingMember, setIsAddingMember] = useState(false);
-  const [isCreatingEvent, setIsCreatingEvent] = useState(false);
+  const [isCreatingEvent, setIsCreatingEvent] = useState(
+    new URLSearchParams(window.location.search).get("create") || false
+  );
 
   const navigate = useNavigate();
 
