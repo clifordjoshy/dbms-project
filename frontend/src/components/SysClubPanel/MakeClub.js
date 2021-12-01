@@ -1,29 +1,43 @@
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useCallback, useContext, useState } from "react";
-import { AppContext } from "../../App";
+import { useCallback, useState } from "react";
 
 const ClubAddModal = () => {
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const [pword, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const { setUserToken } = useContext(AppContext);
+  const userToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
 
   const handleCreate = useCallback(() => {
     const errorsNew = {};
     
     errorsNew.name = false;
-    if (password.length < 6) {
-      errorsNew.password = true;
+    if (pword.length < 6) {
+      errorsNew.pword = true;
     }
 
-    if (errorsNew.name || errorsNew.password) {
+    if (errorsNew.name || errorsNew.pword) {
       setErrors(errorsNew);
       return;
     }
-  }, [name, password, setUserToken]);
+
+    axios
+        .post(
+          process.env.REACT_APP_BACKEND_URL + "club_add",
+          {
+            club_name: name,
+            password: pword,
+            club_desc: ""
+          },
+          { headers: { Authorization: `Bearer ${userToken}` } }
+        )
+        .then(() => {
+          setName({ ...name, name: null });
+          setPassword({...pword, pword: null});
+        });
+    }, [name, password]);
 
   return (
     <Modal.Dialog size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -51,7 +65,7 @@ const ClubAddModal = () => {
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
-              value={password}
+              value={pword}
               isInvalid={errors.password}
             />
           </Form.Group>
