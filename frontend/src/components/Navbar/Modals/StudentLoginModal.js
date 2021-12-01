@@ -4,24 +4,19 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
-import { AppContext } from "../../App";
+import { AppContext } from "../../../App";
 
-const LoginModal = ({ show, onHide }) => {
-  const [email, setEmail] = useState("");
+const StudentLoginModal = ({ show, onHide }) => {
+  const [rollNo, setRollNo] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const { setUserToken } = useContext(AppContext);
+  const { setUserToken, setUserType } = useContext(AppContext);
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(email.toLowerCase())) {
-      errorsNew.email = true;
-    }
     if (password.length < 6) {
       errorsNew.password = true;
     }
@@ -31,39 +26,41 @@ const LoginModal = ({ show, onHide }) => {
       return;
     }
 
-    //setUserToken("deletethisline");
+    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "login/student", { username: email, password }).then((res) => {
+    axios.post(process.env.REACT_APP_BACKEND_URL + "login/student", { 'roll_no': rollNo, 'password': password }).then((res) => {
       setLoading(false);
       if (res.data.access_token) {
         setUserToken(res.data.access_token);
+        setUserType('student');
         if (remember) {
           setUserToken(res.data.access_token);
+          setUserType('student');
         }
         onHide();
       } else {
         setErrors({ login: true });
       }
     });
-  }, [email, password, remember, onHide, setUserToken]);
+  }, [rollNo, password, remember, onHide, setUserToken]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header>
-        <Modal.Title id="contained-modal-title-vcenter">Login</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Student Login</Modal.Title>
         <button className="btn-close" onClick={onHide} />
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
+          <Form.Group className="mb-3" controlId="formBasicRollNo">
+            <Form.Label>Roll Number</Form.Label>
             <Form.Control
               required
-              type="email"
-              placeholder="Enter email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              isInvalid={errors.email}
+              type="text"
+              placeholder="Enter NITC Roll Number"
+              onChange={(e) => setRollNo(e.target.value)}
+              value={rollNo}
+              isInvalid={errors.roll_no}
             />
           </Form.Group>
 
@@ -92,4 +89,4 @@ const LoginModal = ({ show, onHide }) => {
   );
 };
 
-export default LoginModal;
+export default StudentLoginModal;

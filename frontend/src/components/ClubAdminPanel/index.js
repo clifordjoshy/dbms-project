@@ -10,9 +10,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ClubAdminPanel = () => {
-  // const { userToken } = useContext(AppContext);
-  const userToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
+  const { userToken } = useContext(AppContext);
   const [clubInfo, setClubInfo] = useState(null);
   const [description, setDescription] = useState("");
   const [isDeletingMembers, setIsDeletingMembers] = useState(false);

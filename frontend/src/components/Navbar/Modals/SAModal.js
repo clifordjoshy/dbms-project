@@ -4,25 +4,21 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
-import { AppContext } from "../../App";
+import { AppContext } from "../../../App";
 
-const LoginModal = ({ show, onHide }) => {
-  const [email, setEmail] = useState("");
+const SALoginModal = ({ show, onHide }) => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const { setUserToken } = useContext(AppContext);
+  const { setUserToken, setUserType } = useContext(AppContext);
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(email.toLowerCase())) {
-      errorsNew.email = true;
-    }
-    if (password.length < 6) {
+    
+    if (password.length < 4) {
       errorsNew.password = true;
     }
 
@@ -31,39 +27,41 @@ const LoginModal = ({ show, onHide }) => {
       return;
     }
 
-    //setUserToken("deletethisline");
+    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "login/student", { username: email, password }).then((res) => {
+    axios.post(process.env.REACT_APP_BACKEND_URL + "login/sa", { 'username': username, 'password': password }).then((res) => {
       setLoading(false);
       if (res.data.access_token) {
         setUserToken(res.data.access_token);
+        setUserType('SA');
         if (remember) {
           setUserToken(res.data.access_token);
+          setUserType('SA');
         }
         onHide();
       } else {
         setErrors({ login: true });
       }
     });
-  }, [email, password, remember, onHide, setUserToken]);
+  }, [username, password, remember, onHide, setUserToken]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header>
-        <Modal.Title id="contained-modal-title-vcenter">Login</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">System Admin Login</Modal.Title>
         <button className="btn-close" onClick={onHide} />
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
+          <Form.Group className="mb-3" controlId="formBasicUsername">
+            <Form.Label>Username</Form.Label>
             <Form.Control
               required
-              type="email"
-              placeholder="Enter email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              isInvalid={errors.email}
+              type="text"
+              placeholder="Enter username"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+              isInvalid={errors.username}
             />
           </Form.Group>
 
@@ -92,4 +90,4 @@ const LoginModal = ({ show, onHide }) => {
   );
 };
 
-export default LoginModal;
+export default SALoginModal;
