@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from main import *
 from models import (Students, Members, Clubs, Participation, Events, Bookings, Venues, SysAdmin,
-                    event_schema, events_schema, clubs_schema, venues_schema, members_schema)
+                    event_schema, events_schema, clubs_schema, venues_schema, members_schema, student_schema)
 
 from flask_cors import cross_origin
 
@@ -387,6 +387,17 @@ def registered_students():
         participant = Students.query.filter_by(roll_number=participation.participation_roll).first()
         participants.append({'roll_no' : participant.roll_number, 'name' : participant.name})
     return jsonify({"participants":participants})
+  
+@app.route('/student_details', methods=['POST'])
+@cross_origin()
+@jwt_required()
+def student_details():
+    rollNumber=get_jwt_identity()
+    student=Students.query.filter_by(roll_number=rollNumber).first()
+    student=student_schema.dump(student)
+    return jsonify({"Details are:":student})
+  
+  
 
 # @app.route("/all_questions", methods=['GET'])
 # @cross_origin()
