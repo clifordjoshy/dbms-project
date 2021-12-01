@@ -14,7 +14,7 @@ const ClubDetailsPanel = () => {
         navigate("/");
       }
       axios
-        .get(process.env.REACT_APP_BACKEND_URL + "club_info", {
+        .get(process.env.REACT_APP_BACKEND_URL + "clubs_all", {
           headers: { Authorization: `Bearer ${userToken}` },
         })
         .then((res) => {
@@ -35,7 +35,7 @@ const ClubDetailsPanel = () => {
         <div>
           <h3>Members</h3>
           <div className="overflow-auto" style={{ height: "500px", width: "700px"}}>
-          {clubInfo?.members.map(({ name, roll_no, position }) => {
+          {clubInfo?.members.map(({ name, position }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
                   <Card.Body>
