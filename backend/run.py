@@ -363,7 +363,7 @@ def club_info_student(club_name):
     except:
         return jsonify({"msg":"No such club"})
 
-@app.route("/registered_students", methods=['GET'])
+@app.route("/registered_students", methods=['POST'])
 @cross_origin()
 @jwt_required()
 def registered_students():
