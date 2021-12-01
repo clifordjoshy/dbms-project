@@ -1,14 +1,18 @@
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useContext} from "react";
+import { useNavigate } from "react-router";
+import axios from "axios";
+import { AppContext } from "../../App";
 
 const ClubAddModal = () => {
   const [name, setName] = useState("");
   const [pword, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const userToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODI4MjE3NSwianRpIjoiYjgyNDU3N2EtOGJiZi00ODczLTk2MWMtNTY3ODI0NWU3ZTU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IkNhcGl0YWxpc3RzIiwibmJmIjoxNjM4MjgyMTc1LCJleHAiOjE2MzgzNjg1NzV9.h0LOx7E7ZiupPkpsdCPKfBQUznsYv5Qos8n9uDL9bek";
+  const contextInfo = useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleCreate = useCallback(() => {
     const errorsNew = {};
@@ -31,13 +35,13 @@ const ClubAddModal = () => {
             password: pword,
             club_desc: ""
           },
-          { headers: { Authorization: `Bearer ${userToken}` } }
+          { headers: { Authorization: `Bearer ${contextInfo.userToken}` } }
         )
         .then(() => {
-          setName({ ...name, name: null });
-          setPassword({...pword, pword: null});
+          navigate("/admin");
+
         });
-    }, [name, password]);
+    }, [name, pword]);
 
   return (
     <Modal.Dialog size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

@@ -4,18 +4,21 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
-import { AppContext } from "../../App";
+import { AppContext } from "../../../App";
 
-const LoginModal = ({ show, onHide }) => {
+const StudentSignUpModal = ({ show, onHide }) => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [rollNo, setRollNo] = useState("");
   const [password, setPassword] = useState("");
+  const [c_password, setc_password] = useState("");
   const [remember, setRemember] = useState(true);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const { setUserToken } = useContext(AppContext);
+  const { setUserToken, setUserType } = useContext(AppContext);
 
-  const handleLogin = useCallback(() => {
+  const handleSignUp = useCallback(() => {
     const errorsNew = {};
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -31,30 +34,74 @@ const LoginModal = ({ show, onHide }) => {
       return;
     }
 
-    //setUserToken("deletethisline");
+    const req = {
+        "name": name,
+        "roll_no": rollNo,
+        "email": email,
+        "password": password,
+        "confirm_password": c_password
+    };
+
+    console.log(req);
+
+    
     setLoading(true);
-    axios.post(process.env.REACT_APP_BACKEND_URL + "login/student", { username: email, password }).then((res) => {
+    axios.post(process.env.REACT_APP_BACKEND_URL + "register", {
+        "name": name,
+        "roll_no": rollNo,
+        "email": email,
+        "password": password,
+        "confirm_password": c_password
+    },
+    ).then((res) => {
       setLoading(false);
       if (res.data.access_token) {
         setUserToken(res.data.access_token);
+        setUserType('student');
         if (remember) {
           setUserToken(res.data.access_token);
+          setUserType('student');
         }
         onHide();
       } else {
         setErrors({ login: true });
       }
     });
-  }, [email, password, remember, onHide, setUserToken]);
+  }, [email, password, c_password, name, rollNo, remember, onHide, setUserToken]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header>
-        <Modal.Title id="contained-modal-title-vcenter">Login</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Student Sign Up</Modal.Title>
         <button className="btn-close" onClick={onHide} />
       </Modal.Header>
       <Modal.Body>
         <Form>
+
+        <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              placeholder="Enter Name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              isInvalid={errors.name}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicRollNo">
+            <Form.Label>Roll Number</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              placeholder="Enter NITC Roll Number"
+              onChange={(e) => setRollNo(e.target.value)}
+              value={rollNo}
+              isInvalid={errors.rollNo}
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
@@ -78,6 +125,18 @@ const LoginModal = ({ show, onHide }) => {
               isInvalid={errors.password}
             />
           </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              required
+              type="password"
+              placeholder="Confirm Password"
+              onChange={(e) => setc_password(e.target.value)}
+              value={c_password}
+              isInvalid={errors.password}
+            />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check label="Remember me" checked={remember} onChange={() => setRemember(!remember)} />
           </Form.Group>
@@ -86,10 +145,10 @@ const LoginModal = ({ show, onHide }) => {
       </Modal.Body>
       <Modal.Footer>
         {loading && <Spinner animation="border" />}
-        <Button onClick={handleLogin}>Login</Button>
+        <Button onClick={handleSignUp}>Sign Up</Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default LoginModal;
+export default StudentSignUpModal;
