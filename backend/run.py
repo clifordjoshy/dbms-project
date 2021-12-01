@@ -350,27 +350,30 @@ def club_info():
 @cross_origin()
 @jwt_required()
 def club_info_student(club_name):
-    club = Clubs.query.filter_by(club_name=club_name).first()
-    events = Events.query.filter_by(event_club=club_name).all()
-    result = {}
-    result['club_name'] = club_name
-    result['club_desc'] = club.club_desc
-    members_rno = Members.query.filter_by(club=club_name).all()
-    members_rno = members_schema.dump(members_rno)
-    members = []
-    for member in members_rno:
-        print(member)
-        name = Students.query.filter_by(roll_number=member['member_roll_number']).first().name
-        members.append({"name": name, "position": member['position']})
-    result['members'] = members
-    events = Events.query.filter_by(event_club=club_name).all()
-    events = events_schema.dump(events)
-    for event in events:
-        booking = Bookings.query.filter_by(booking_id=event['event_booking_id']).first()
-        event['slot'] = booking.slot
-        event['date'] = booking.date
-    result['events'] = events
-    return jsonify({"info":result})
+    try:
+        club = Clubs.query.filter_by(club_name=club_name).first()
+        events = Events.query.filter_by(event_club=club_name).all()
+        result = {}
+        result['club_name'] = club_name
+        result['club_desc'] = club.club_desc
+        members_rno = Members.query.filter_by(club=club_name).all()
+        members_rno = members_schema.dump(members_rno)
+        members = []
+        for member in members_rno:
+            print(member)
+            name = Students.query.filter_by(roll_number=member['member_roll_number']).first().name
+            members.append({"name": name, "position": member['position']})
+        result['members'] = members
+        events = Events.query.filter_by(event_club=club_name).all()
+        events = events_schema.dump(events)
+        for event in events:
+            booking = Bookings.query.filter_by(booking_id=event['event_booking_id']).first()
+            event['slot'] = booking.slot
+            event['date'] = booking.date
+        result['events'] = events
+        return jsonify({"info":result})
+    except:
+        return jsonify({"msg":"No such club"})
 
 @app.route("/registered_students", methods=['GET'])
 @cross_origin()
