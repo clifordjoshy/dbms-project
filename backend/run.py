@@ -174,11 +174,8 @@ def view_event():
 @cross_origin()
 @jwt_required()
 def edit_club():
-    club_name = get_jwt_identity()
-    print(club_name)
+    club_name = request.json['club_name']
     club = Clubs.query.filter_by(club_name=club_name).first()
-    print(club)
-    club.club_name = request.json['club_name']
     club.club_desc = request.json['club_desc']
     db.session.commit()
     return jsonify({"msg":"Edited"})
@@ -326,6 +323,7 @@ def club_members():
 @jwt_required()
 def club_info():
     club_name= get_jwt_identity()
+    # print(club_name)
     club = Clubs.query.filter_by(club_name=club_name).first()
     events = Events.query.filter_by(event_club=club_name).all()
     result = {}
@@ -338,6 +336,32 @@ def club_info():
         print(member)
         name = Students.query.filter_by(roll_number=member['member_roll_number']).first().name
         members.append({"name": name, "roll_no": member['member_roll_number'], "position": member['position']})
+    result['members'] = members
+    events = Events.query.filter_by(event_club=club_name).all()
+    events = events_schema.dump(events)
+    for event in events:
+        booking = Bookings.query.filter_by(booking_id=event['event_booking_id']).first()
+        event['slot'] = booking.slot
+        event['date'] = booking.date
+    result['events'] = events
+    return jsonify({"info":result})
+
+@app.route("/<club_name>", methods=['GET'])
+@cross_origin()
+@jwt_required()
+def club_info_student(club_name):
+    club = Clubs.query.filter_by(club_name=club_name).first()
+    events = Events.query.filter_by(event_club=club_name).all()
+    result = {}
+    result['club_name'] = club_name
+    result['club_desc'] = club.club_desc
+    members_rno = Members.query.filter_by(club=club_name).all()
+    members_rno = members_schema.dump(members_rno)
+    members = []
+    for member in members_rno:
+        print(member)
+        name = Students.query.filter_by(roll_number=member['member_roll_number']).first().name
+        members.append({"name": name, "position": member['position']})
     result['members'] = members
     events = Events.query.filter_by(event_club=club_name).all()
     events = events_schema.dump(events)
