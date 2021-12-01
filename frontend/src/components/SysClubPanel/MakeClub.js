@@ -2,6 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useCallback, useState } from "react";
+import axios from "axios";
 
 const ClubAddModal = () => {
   const [name, setName] = useState("");
@@ -37,7 +38,7 @@ const ClubAddModal = () => {
           setName({ ...name, name: null });
           setPassword({...pword, pword: null});
         });
-    }, [name, password]);
+    }, [name, pword]);
 
   return (
     <Modal.Dialog size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
