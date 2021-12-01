@@ -12,6 +12,7 @@ import SysAdminMakeVenue from "./components/SysVenuePanel";
 import HomePage from "./components/HomePage";
 import ClubEventPanel from "./components/ClubEventPanel";
 import StudentDetails from "./components/StudentDetails";
+import Events from "./components/Events";
 
 export const AppContext = createContext();
 
@@ -28,8 +29,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/clubs/:clubname" element={<ClubDetailsPanel />} />
           {/* see all events + registered events as student */}
-          <Route path="/events" element={<StudentEvents />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/student" element={<StudentDetails />} />
+          <Route path="/student/events" element={<StudentEvents />} />
           {/* club admin page */}
           <Route path="/clubadmin" element={<ClubAdminPanel />} />
           {/* club admin see data for an event */}

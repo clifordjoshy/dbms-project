@@ -34,7 +34,7 @@ const Navbar = () => {
       .then((res) => {
         setClubs(res.data.clubs);
       });
-  }, [userToken]);
+  }, []);
 
   let navOptions;
   if (!userToken) {
@@ -60,6 +60,7 @@ const Navbar = () => {
   } else {
     if (userType === "SA") {
       //for SA users
+      console.log(userToken);
       navOptions = (
         <>
           <Nav.Link onClick={() => navigate("/admin")}>Home</Nav.Link>
@@ -82,10 +83,11 @@ const Navbar = () => {
       );
     } else if (userType === "student") {
       //For student users
+      console.log(userToken);
       navOptions = (
         <>
           <Nav.Link onClick={() => navigate(`/student`)}>Student Details</Nav.Link>
-          <Nav.Link onClick={() => navigate(`/events`)}>All Events</Nav.Link>
+          <Nav.Link onClick={() => navigate(`/student/events`)}>All Events</Nav.Link>
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {
@@ -102,6 +104,7 @@ const Navbar = () => {
       );
     } else {
       //for CA users
+      console.log(userToken);
       navOptions = (
         <>
           <Nav.Link onClick={() => navigate(`/clubadmin`)}>View Club Info</Nav.Link>
