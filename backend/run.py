@@ -346,7 +346,7 @@ def club_info():
     result['events'] = events
     return jsonify({"info":result})
 
-@app.route("/<club_name>", methods=['GET'])
+@app.route("/clubs/<club_name>", methods=['GET'])
 @cross_origin()
 @jwt_required()
 def club_info_student(club_name):
