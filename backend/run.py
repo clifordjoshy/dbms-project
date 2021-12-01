@@ -133,25 +133,12 @@ def edit_event():
     event_id = request.json['event_id']
     event = Events.query.filter_by(event_id=event_id).first()
     booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
-    try:
-        event_name = request.json['event_name']
-    except: pass
-    try:
-        event_club = Clubs.query.filter_by(club=get_jwt_identity()).first().club
-    except: pass
-    try:
-        event.event_desc = request.json['event_desc']
-    except: pass
-    try:
-        event.max_limit = request.json['max_limit']
-    except: pass
-    try:
-        booking.slot = request.json['slot']
-    except: pass
-    try:
-        booking.date = datetime.date.strptime(request.json['date'], '%Y-%m-%d')
-    except: pass
-    
+    if 'event_name' in request.json: event.event_name = request.json['event_name']
+    if 'event_desc' in request.json: event.event_desc = request.json['event_desc']
+    if 'max_limit' in request.json: event.max_limit = request.json['max_limit']
+    if 'slot' in request.json: booking.slot = request.json['slot']
+    if 'date' in request.json: booking.date = datetime.datetime.strptime(request.json['date'], '%Y-%m-%d')
+    if 'event_venue' in request.json: booking.booking_venue_name = request.json['event_venue']
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
 
