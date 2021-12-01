@@ -35,7 +35,7 @@ const Navbar = () => {
       .then((res) => {
         setClubs(res.data.clubs);
       });
-  }, [clubs]);
+  }, []);
 
   let navOptions;
   if (!userToken) {
