@@ -42,6 +42,7 @@ const Navbar = () => {
   if (!userToken) {
     navOptions = (
       <>
+        <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
         <NavDropdown title="Clubs" id="basic-nav-dropdown">
           {clubs &&
             clubs.map((club) => (
