@@ -16,6 +16,12 @@ class Students(db.Model):
         self.password = password
         self.roll_number = roll_number
         self.email = email
+        
+class StudentsSchema(ma.Schema):
+    class Meta:
+        fields = ('name','roll_number','email')
+student_schema = StudentsSchema()
+        
 
 class Members(db.Model):
     member_roll_number = db.Column(db.String(9), db.ForeignKey('students.roll_number'), primary_key = True)
