@@ -258,6 +258,7 @@ def events_future():
         booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
         if booking.date > datetime.datetime.now():
             future_events.append(event)
+    future_events = events_schema.dump(future_events)
     return jsonify({"events":future_events})
 
 @app.route("/events_student", methods=['GET'])
