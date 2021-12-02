@@ -6,7 +6,7 @@ const Events = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_BACKEND_URL + "events_all").then((res) => {
+    axios.get(process.env.REACT_APP_BACKEND_URL + "events_future").then((res) => {
       setEvents(res.data.events);
     });
   }, []);

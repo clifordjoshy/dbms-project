@@ -12,22 +12,13 @@ const StudentEvents = () => {
     const [regEvents, setRegEvents] = useState([]);
     const { userToken } = useContext(AppContext);
 
-    var regNum = [];
+    const [unregEvents, setUnRegEvents] = useState([]);
+    const [isRegistering, setIsRegistering] = useState(false);
 
    
+    
 
-    useEffect(() => {
-
-      console.log(`StudDetails ${userToken}`);
-      
-      axios
-      .get(process.env.REACT_APP_BACKEND_URL + "events_all")
-      .then((res) => {
-        setEvents(res.data.events);
-      });
-
-    },[]);
-
+    //get the events the student is registered to
     useEffect(() => {
       axios
       .get(process.env.REACT_APP_BACKEND_URL + "events_student", {
@@ -35,13 +26,41 @@ const StudentEvents = () => {
       })
       .then((res) => {
         setRegEvents(res.data.events);
-        if(regEvents.length > 0){
-          regEvents.forEach((event) => regNum.push(event.id));
-        }
-        
-      });
-    },[regEvents]);
 
+        // let temp = [];
+        // regEvents.forEach((event) => temp.push(event.event_id));
+        // setRegNum(temp);
+        console.log(regEvents);
+      });
+    },[isRegistering]);
+
+    //get other events
+    useEffect(() => {
+      
+      axios
+      .get(process.env.REACT_APP_BACKEND_URL + "events_future")
+      .then((res) => {
+        setEvents(res.data.events);
+      });
+
+    },[]);
+
+    //compute unreg
+    useEffect(() => {
+      let temp = [];
+      regEvents.forEach((event) => temp.push(event.event_id));
+      
+      let temp_events = [];
+      events.forEach((event) => {
+        if(!temp.includes(event.event_id)){
+          temp_events.push(event);
+        }
+      });
+
+      setUnRegEvents(temp_events);
+    },[events,regEvents]);
+
+    //Register --works
     function handleRegister(event,index) {
       console.log(userToken);
         axios
@@ -53,11 +72,7 @@ const StudentEvents = () => {
             { headers: { Authorization: `Bearer ${userToken}` } }
           )
           .then(() => {
-            let temp = regEvents;
-            temp[index] = temp[temp.length-1];
-            console.log(temp);
-            temp.pop();
-            setRegEvents(temp);
+            setIsRegistering(!isRegistering);
           });
       }
 
@@ -81,8 +96,8 @@ const StudentEvents = () => {
           </Card>
         ))}
         <h1>Other Events</h1>
-        {events.length === 0 && <p>no registered events</p>}
-        {events.length > 0 && events.filter(event => !(regNum.includes(event.id))).map((event,index) => (
+        {unregEvents.length === 0 && <p>no registered events</p>}
+        {unregEvents.length > 0 && unregEvents.map((event,index) => (
             <Card style={{ width: '18rem' }}>
             <Card.Body>
               <Card.Title>{event.event_name}</Card.Title>
