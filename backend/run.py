@@ -253,11 +253,11 @@ def events_all():
 @cross_origin()
 def events_future():
     events = Events.query.all()
-    future_events = {}
+    future_events = []
     for event in events:
         booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
         if booking.date > datetime.datetime.now():
-            future_events[event.event_id] = event.event_name
+            future_events.append(event)
     return jsonify({"events":future_events})
 
 @app.route("/events_student", methods=['GET'])
