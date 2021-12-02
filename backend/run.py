@@ -264,12 +264,12 @@ def events_future():
 @cross_origin()
 @jwt_required()
 def events_student():
-    events = {}
+    events = []
     roll_no = get_jwt_identity()
     participations = Participation.query.filter_by(participation_roll=roll_no).all()
     for participation in participations:
         event = Events.query.filter_by(event_id=participation.participation_event).first()
-        events[event.event_id] = event.event_name
+        events.append({'event_id':event.event_id, 'event_name':event.event_name})
     return jsonify({"events":events})
 
 @app.route("/clubs_all", methods=['GET'])
