@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../../../App";
+import { useNavigate } from "react-router";
 
 const SALoginModal = ({ show, onHide }) => {
   const [username, setUsername] = useState("");
@@ -14,6 +15,7 @@ const SALoginModal = ({ show, onHide }) => {
   const [loading, setLoading] = useState(false);
 
   const { setUserToken, setUserType } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
@@ -39,7 +41,7 @@ const SALoginModal = ({ show, onHide }) => {
             localStorage.setItem("userToken", res.data.access_token);
             localStorage.setItem("userType", "SA");
           }
-          onHide();
+          navigate('/admin');
         } else {
           setErrors({ login: true });
         }
