@@ -1,7 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useCallback, useState, useContext} from "react";
+import { useCallback, useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { AppContext } from "../../App";
@@ -16,7 +16,7 @@ const ClubAddModal = () => {
 
   const handleCreate = useCallback(() => {
     const errorsNew = {};
-    
+
     errorsNew.name = false;
     if (pword.length < 6) {
       errorsNew.pword = true;
@@ -28,20 +28,19 @@ const ClubAddModal = () => {
     }
 
     axios
-        .post(
-          process.env.REACT_APP_BACKEND_URL + "club_add",
-          {
-            club_name: name,
-            password: pword,
-            club_desc: ""
-          },
-          { headers: { Authorization: `Bearer ${contextInfo.userToken}` } }
-        )
-        .then(() => {
-          navigate("/admin");
-
-        });
-    }, [name, pword]);
+      .post(
+        process.env.REACT_APP_BACKEND_URL + "club_add",
+        {
+          club_name: name,
+          password: pword,
+          club_desc: "",
+        },
+        { headers: { Authorization: `Bearer ${contextInfo.userToken}` } }
+      )
+      .then(() => {
+        navigate("/admin");
+      });
+  }, [name, pword, contextInfo, navigate]);
 
   return (
     <Modal.Dialog size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

@@ -7,7 +7,6 @@ import { AppContext } from "../../App";
 import { useNavigate } from "react-router";
 
 const VenueAddModal = () => {
-
   const [name, setName] = useState("");
 
   const contextInfo = useContext(AppContext);
@@ -20,15 +19,15 @@ const VenueAddModal = () => {
         .post(
           process.env.REACT_APP_BACKEND_URL + "venue_add",
           {
-            venue_name: name
+            venue_name: name,
           },
           { headers: { Authorization: `Bearer ${contextInfo.userToken}` } }
         )
         .then(() => {
-          navigate('/admin');
+          navigate("/admin");
         });
     },
-    [name]
+    [name, contextInfo, navigate]
   );
 
   return (
