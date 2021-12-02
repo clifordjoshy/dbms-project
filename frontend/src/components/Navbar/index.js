@@ -107,8 +107,7 @@ const Navbar = () => {
       console.log(userToken);
       navOptions = (
         <>
-          <Nav.Link onClick={() => navigate(`/clubadmin`)}>View Club Info</Nav.Link>
-          <Nav.Link onClick={() => navigate(`/clubadmin?create=true`)}>Create Event</Nav.Link>
+          <Nav.Link onClick={() => navigate(`/clubadmin`)}>Club Details</Nav.Link>
           <Nav.Link
             className="d-flex align-items-center"
             onClick={() => {

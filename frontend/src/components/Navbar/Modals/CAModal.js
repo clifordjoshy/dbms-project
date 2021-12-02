@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../../../App";
+import { useNavigate } from "react-router";
 
 const CALoginModal = ({ show, onHide, clubs }) => {
   const [club, setClub] = useState("");
@@ -14,6 +15,7 @@ const CALoginModal = ({ show, onHide, clubs }) => {
   const [loading, setLoading] = useState(false);
 
   const { setUserToken, setUserType } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleLogin = useCallback(() => {
     const errorsNew = {};
@@ -37,7 +39,7 @@ const CALoginModal = ({ show, onHide, clubs }) => {
           localStorage.setItem("userToken", res.data.access_token);
           localStorage.setItem("userType", "CA");
         }
-        onHide();
+        navigate('/clubadmin')
       } else {
         setErrors({ login: true });
       }
