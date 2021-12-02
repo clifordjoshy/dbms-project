@@ -57,7 +57,7 @@ clubs_schema = ClubsSchema(many=True)
 
 class Participation(db.Model):
     participation_roll = db.Column(db.String(9), db.ForeignKey('students.roll_number'), primary_key = True)
-    participation_event = db.Column(db.Integer, db.ForeignKey('events.event_id'))
+    participation_event = db.Column(db.Integer, db.ForeignKey('events.event_id'),primary_key = True)
 
     def __init__(self, participation_roll, participation_event):
         self.participation_roll = participation_roll
