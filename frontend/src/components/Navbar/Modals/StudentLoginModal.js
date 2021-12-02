@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../../../App";
+import { useNavigate } from "react-router";
 
 const StudentLoginModal = ({ show, onHide }) => {
   const [rollNo, setRollNo] = useState("");
@@ -12,6 +13,7 @@ const StudentLoginModal = ({ show, onHide }) => {
   const [remember, setRemember] = useState(true);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { setUserToken, setUserType } = useContext(AppContext);
 
@@ -38,7 +40,7 @@ const StudentLoginModal = ({ show, onHide }) => {
             localStorage.setItem("userToken", res.data.access_token);
             localStorage.setItem("userType", "student");
           }
-          onHide();
+          navigate('/student');
         } else {
           setErrors({ login: true });
         }

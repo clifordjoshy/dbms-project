@@ -82,34 +82,49 @@ const StudentEvents = () => {
 
     return (
       <>
-        <h1>Registered Events</h1>
-        {regEvents.length === 0 && <p>no registered events</p>}
+        {regEvents.length === 0 && unregEvents.length ===0 && 
+      (<div className="d-flex vh-100 flex-column">
+        <div className="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-white">
+          <h3 className="text-white">No events at the moment</h3>
+        </div>
+      </div>
+      )}
+        <h4 className="text-white mt-5 mb-2 mx-5">Registered Events</h4>
+        <div className="mt-5 d-flex flex-column align-items-center justify-content-center flex-grow-1">
+        {regEvents.length === 0 && <h5 className="text-white">No registered events at the moment</h5>}
         {regEvents.length > 0 && regEvents.map((event)=> (
-            <Card style={{ width: '18rem' }}>
+            <Card className="mb-2" style={{ width: "800px" }}>
             <Card.Body>
               <Card.Title>{event.event_name}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{event.event_club}</Card.Subtitle>
-              <Card.Text>
-                {`${event.event_desc}\n\nMax Participation Limit: ${event.max_limit}`}
-              </Card.Text>
+              <Card.Subtitle className="mb-4 text-muted">{event.event_club}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{`Date: ${event.date}`}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{`Slot: ${event.slot}`}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{`Venue: ${event.venue}`}</Card.Subtitle>
+              <Card.Subtitle className="mb-4 text-muted">{`Max participation count: ${event.max_limit}`}</Card.Subtitle>
+              <Card.Text>{`${event.event_desc}`}</Card.Text>
             </Card.Body>
           </Card>
         ))}
-        <h1>Other Events</h1>
-        {unregEvents.length === 0 && <p>no registered events</p>}
+        </div>
+        <h4 className="text-white mt-5 mb-2 mx-5">Other Events</h4>
+        <div className="mt-5 d-flex flex-column align-items-center justify-content-center flex-grow-1">
+        {unregEvents.length === 0 && <h5 className="text-white">No other events at the moment</h5>}
         {unregEvents.length > 0 && unregEvents.map((event,index) => (
-            <Card style={{ width: '18rem' }}>
+            <Card className="mb-2" style={{ width: "800px" }}>
             <Card.Body>
               <Card.Title>{event.event_name}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{event.event_club}</Card.Subtitle>
-              <Card.Text>
-                {`${event.event_desc}\n\nMax Participation Limit: ${event.max_limit}`}
-              </Card.Text>
+              <Card.Subtitle className="mb-4 text-muted">{event.event_club}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{`Date: ${event.date}`}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{`Slot: ${event.slot}`}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">{`Venue: ${event.venue}`}</Card.Subtitle>
+              <Card.Subtitle className="mb-4 text-muted">{`Max participation count: ${event.max_limit}`}</Card.Subtitle>
+              <Card.Text>{`${event.event_desc}`}</Card.Text>
               <Button variant="primary" onClick={() => handleRegister(event,index)}>Register</Button>
             </Card.Body>
           </Card>
         )
         )}
+        </div>
       </>
     );
   };

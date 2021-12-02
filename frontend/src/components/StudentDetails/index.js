@@ -33,7 +33,8 @@ const StudentDetails = () => {
 
     return (
       <>
-        <Card style={{ width: '18rem' }}>
+        <div className="mt-5 d-flex flex-column align-items-center justify-content-center flex-grow-1">
+        <Card style={{ width: '500px' }}>
         <Card.Body>
             <Card.Title>{student.name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">Roll Number</Card.Subtitle>
@@ -42,6 +43,7 @@ const StudentDetails = () => {
             <Card.Text>{student.email}</Card.Text>
         </Card.Body>
         </Card>
+        </div>
       </>
     );
   };
