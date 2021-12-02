@@ -24,13 +24,13 @@ const NewMemberModal = ({ show, onHide }) => {
   const handleAddition = useCallback(
     (e) => {
       e.preventDefault();
-      const roll = rollNumber.toLowerCase();
+      //const roll = rollNumber.toLowerCase();
 
       setLoading(true);
       axios
         .post(
           process.env.REACT_APP_BACKEND_URL + "club_member_add",
-          { roll_no: roll, position },
+          { roll_no: rollNumber, position },
           { headers: { Authorization: `Bearer ${userToken}` } }
         )
         .then((res) => {

@@ -34,15 +34,7 @@ const StudentSignUpModal = ({ show, onHide }) => {
       return;
     }
 
-    const req = {
-      name: name,
-      roll_no: rollNo,
-      email: email,
-      password: password,
-      confirm_password: c_password,
-    };
-
-    console.log(req);
+    
 
     setLoading(true);
     axios

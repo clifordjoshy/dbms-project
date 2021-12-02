@@ -18,7 +18,7 @@ const HomePage = () => {
       </div>
       <div className="d-flex vh-100 flex-column">
         <div className="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-white">
-          <h1>CSED has a strict academic integrity policy</h1>
+          <h1>NITC CLUB MANAGEMENT SYSTEM</h1>
         </div>
       </div>
     </>
