@@ -270,7 +270,9 @@ def events_student():
     participations = Participation.query.filter_by(participation_roll=roll_no).all()
     for participation in participations:
         event = Events.query.filter_by(event_id=participation.participation_event).first()
-        events.append(event)
+        booking = Bookings.query.filter_by(booking_id=event.event_booking_id).first()
+        if booking.date > datetime.datetime.now():
+            events.append(event)
     events = events_schema.dump(events)
     return jsonify({"events":events})
 
