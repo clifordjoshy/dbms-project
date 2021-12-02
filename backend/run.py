@@ -303,7 +303,7 @@ def club_members():
     result = {}
     for member in members:
         name = Students.query.filter_by(roll_number=member.member_roll_number).first().name
-        result[member_roll_number] = name
+        result['member_roll_number'] = name
     return jsonify({"members":members})
 
 @app.route("/club_info", methods=['GET'])
@@ -375,7 +375,7 @@ def registered_students():
         participants.append({'roll_no' : participant.roll_number, 'name' : participant.name})
     return jsonify({"participants":participants})
   
-@app.route('/student_details', methods=['POST'])
+@app.route('/student_details', methods=['GET'])
 @cross_origin()
 @jwt_required()
 def student_details():
