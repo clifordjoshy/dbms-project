@@ -390,7 +390,7 @@ def registered_students():
     participations = Participation.query.filter_by(participation_event=event_id).all()
     for participation in participations:
         participant = Students.query.filter_by(roll_number=participation.participation_roll).first()
-        participants.append({'roll_no' : participant.roll_number, 'name' : participant.name})
+        participants.append({'roll_no' : participant.roll_number, 'name' : participant.name, 'email': participant.email})
     return jsonify({"participants":participants})
   
 @app.route('/student_details', methods=['GET'])
