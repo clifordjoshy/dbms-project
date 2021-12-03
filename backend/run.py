@@ -14,6 +14,8 @@ from flask_cors import cross_origin
 from main import db
 db.create_all()
 
+/*accepts student details and adds student to students database*/
+
 @app.route('/register', methods=['POST'])
 @cross_origin()
 def user_register():
