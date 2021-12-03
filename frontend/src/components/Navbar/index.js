@@ -42,10 +42,11 @@ const Navbar = () => {
       <>
         <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
         <NavDropdown title="Clubs" id="basic-nav-dropdown">
-          {clubs &&
-            clubs.map((club) => (
-              <NavDropdown.Item onClick={() => navigate(`clubs/${club.club_name}`)}>{club.club_name}</NavDropdown.Item>
-            ))}
+          {clubs?.map((club) => (
+            <NavDropdown.Item onClick={() => navigate(`clubs/${club.club_name}`)} key={club.club_name}>
+              {club.club_name}
+            </NavDropdown.Item>
+          ))}
         </NavDropdown>
         <Nav.Link onClick={() => navigate("/events")}>Events</Nav.Link>
         <DropdownButton id="dropdown-basic-button" title="Sign In">

@@ -71,33 +71,49 @@ const ClubAdminPanel = () => {
   );
 
   return (
-    <div className="mt-3 text-white">
+    <div className="m-3 text-white">
       <div className="d-flex flex-column align-items-center justify-content-center flex-grow-1">
-      <h1>
-        <b>{clubInfo?.club_name}</b>
-      </h1>
-      <textarea
-        style={{width: "800px"}}
-        className="form-control bg-transparent text-white"
-        rows="3"
-        placeholder="<club description here>"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <Button
-        variant={clubInfo?.club_desc === description ? "secondary" : "info"}
-        disabled={clubInfo?.club_desc === description}
-        className="float-end mt-3"
-        onClick={onDescriptionUpdate}
-      >
-        Save Changes
-      </Button>
+        <h1>
+          <b>{clubInfo?.club_name}</b>
+        </h1>
+        <textarea
+          style={{ width: "800px" }}
+          className="form-control bg-transparent text-white"
+          rows="3"
+          placeholder="<club description here>"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Button
+          variant={clubInfo?.club_desc === description ? "secondary" : "info"}
+          disabled={clubInfo?.club_desc === description}
+          className="float-end mt-3"
+          onClick={onDescriptionUpdate}
+        >
+          Save Changes
+        </Button>
       </div>
-      <br />
       <br />
       <div className="collapse-cards">
         <div>
-          <h3>Members</h3>
+          <div className="mb-2 d-flex justify-content-between">
+            <h3>Members</h3>
+            <div className="d-flex flex-row-reverse">
+              <Button variant="success" onClick={() => setIsAddingMember(true)}>
+                Add New Member
+              </Button>
+              <Button
+                variant="danger"
+                className="me-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsDeletingMembers(!isDeletingMembers);
+                }}
+              >
+                {isDeletingMembers ? "Return" : "Delete Members"}
+              </Button>
+            </div>
+          </div>
           <div className="overflow-auto" style={{ height: "500px" }}>
             {clubInfo?.members.map(({ name, roll_no, position }) => {
               return (
@@ -125,22 +141,15 @@ const ClubAdminPanel = () => {
               );
             })}
           </div>
-          <Button variant="success" className="float-end mt-2" onClick={() => setIsAddingMember(true)}>
-            Add New Member
-          </Button>
-          <Button
-            variant="danger"
-            className="float-end mt-2 me-2"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsDeletingMembers(!isDeletingMembers);
-            }}
-          >
-            {isDeletingMembers ? "Return" : "Delete Members"}
-          </Button>
         </div>
         <div>
-          <h3>Events</h3>
+          <div className="mb-2 d-flex justify-content-between">
+            <h3>Events</h3>
+            <Button variant="success" onClick={() => setIsCreatingEvent(true)}>
+              Create New Event
+            </Button>
+          </div>
+
           <div className="overflow-auto" style={{ height: "500px" }}>
             {clubInfo?.events.map(({ event_name, date, slot, event_id }) => {
               return (
@@ -165,9 +174,6 @@ const ClubAdminPanel = () => {
               );
             })}
           </div>
-          <Button variant="success" className="float-end mt-2" onClick={() => setIsCreatingEvent(true)}>
-            Create New Event
-          </Button>
         </div>
       </div>
       <NewMemberModal show={isAddingMember} onHide={() => setIsAddingMember(false)} />

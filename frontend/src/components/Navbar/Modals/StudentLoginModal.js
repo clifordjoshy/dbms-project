@@ -40,12 +40,12 @@ const StudentLoginModal = ({ show, onHide }) => {
             localStorage.setItem("userToken", res.data.access_token);
             localStorage.setItem("userType", "student");
           }
-          navigate('/student');
+          navigate("/student");
         } else {
           setErrors({ login: true });
         }
       });
-  }, [rollNo, password, remember, onHide, setUserToken, setUserType]);
+  }, [rollNo, password, remember, navigate, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
