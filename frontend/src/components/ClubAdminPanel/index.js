@@ -96,7 +96,24 @@ const ClubAdminPanel = () => {
       <br />
       <div className="collapse-cards">
         <div>
-          <h3>Members</h3>
+          <div className="mb-2 d-flex justify-content-between">
+            <h3>Members</h3>
+            <div className="d-flex flex-row-reverse">
+              <Button variant="success" onClick={() => setIsAddingMember(true)}>
+                Add New Member
+              </Button>
+              <Button
+                variant="danger"
+                className="me-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsDeletingMembers(!isDeletingMembers);
+                }}
+              >
+                {isDeletingMembers ? "Return" : "Delete Members"}
+              </Button>
+            </div>
+          </div>
           <div className="overflow-auto" style={{ height: "500px" }}>
             {clubInfo?.members.map(({ name, roll_no, position }) => {
               return (
@@ -124,22 +141,15 @@ const ClubAdminPanel = () => {
               );
             })}
           </div>
-          <Button variant="success" className="float-end mt-2" onClick={() => setIsAddingMember(true)}>
-            Add New Member
-          </Button>
-          <Button
-            variant="danger"
-            className="float-end mt-2 me-2"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsDeletingMembers(!isDeletingMembers);
-            }}
-          >
-            {isDeletingMembers ? "Return" : "Delete Members"}
-          </Button>
         </div>
         <div>
-          <h3>Events</h3>
+          <div className="mb-2 d-flex justify-content-between">
+            <h3>Events</h3>
+            <Button variant="success" onClick={() => setIsCreatingEvent(true)}>
+              Create New Event
+            </Button>
+          </div>
+
           <div className="overflow-auto" style={{ height: "500px" }}>
             {clubInfo?.events.map(({ event_name, date, slot, event_id }) => {
               return (
@@ -164,9 +174,6 @@ const ClubAdminPanel = () => {
               );
             })}
           </div>
-          <Button variant="success" className="float-end mt-2" onClick={() => setIsCreatingEvent(true)}>
-            Create New Event
-          </Button>
         </div>
       </div>
       <NewMemberModal show={isAddingMember} onHide={() => setIsAddingMember(false)} />
