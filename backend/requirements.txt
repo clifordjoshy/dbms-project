@@ -13,5 +13,3 @@ Werkzeug == 2.0.1
 flask_marshmallow == 0.14.0
 
 marshmallow-sqlalchemy == 0.26.1
-
-gunicorn == 20.0.4
