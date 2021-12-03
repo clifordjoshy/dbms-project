@@ -88,10 +88,18 @@ GET
 recieve: members of club administered by current user(ca)
 
 /registered_students
-GET
+POST
 send: event_id
 recieve: all participants
 
 /club_info
 GET
+recieve: club_name, club_desc, members including roll no, events
+
+/clubs/<club_name>
+GET
 recieve: club_name, club_desc, members, events
+
+/student_details
+GET
+recieve: name, roll no, email
