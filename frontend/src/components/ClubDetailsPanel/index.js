@@ -1,22 +1,17 @@
 import Card from "react-bootstrap/Card";
-import { useContext, useEffect, useState } from "react";
-import expandIcon from "../../icons/expand.svg";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 
 const ClubDetailsPanel = () => {
-  const {clubname} = useParams();
+  const { clubname } = useParams();
   const [clubInfo, setClubInfo] = useState(null);
 
   useEffect(() => {
-
-    axios
-      .get(process.env.REACT_APP_BACKEND_URL + `clubs/${clubname}`)
-      .then((res) => {
-        setClubInfo(res.data.info);
-      });
-  });
+    axios.get(process.env.REACT_APP_BACKEND_URL + `clubs/${clubname}`).then((res) => {
+      setClubInfo(res.data.info);
+    });
+  }, [clubname]);
 
   return (
     <>
@@ -31,40 +26,38 @@ const ClubDetailsPanel = () => {
           <div>
             <h3>Members</h3>
             <div className="overflow-auto" style={{ height: "500px", width: "700px" }}>
-              {clubInfo?.members.map(({ name, position }) =>  (
-                  <Card className="w-100 mb-2 text-black">
-                    <Card.Body>
-                      <Card.Title>{name}</Card.Title>
-                      <Card.Text className="float-start">{position}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                ))
-              }
+              {clubInfo?.members.map(({ name, position }) => (
+                <Card className="w-100 mb-2 text-black">
+                  <Card.Body>
+                    <Card.Title>{name}</Card.Title>
+                    <Card.Text className="float-start">{position}</Card.Text>
+                  </Card.Body>
+                </Card>
+              ))}
             </div>
           </div>
           <div>
             <h3>Events</h3>
             <div className="overflow-auto" style={{ height: "500px", width: "700px" }}>
               {clubInfo?.events.map(({ event_name, date, slot, event_id }) => (
-                  <Card className="w-100 mb-2 text-black">
-                    <Card.Body>
-                      <Card.Title>{event_name}</Card.Title>
-                      <Card.Text className="float-start m-0">
-                        {date.substring(0, date.indexOf("00:00:00"))}
-                        <br />
-                        {slot}
-                      </Card.Text>
-                      {/* <input
+                <Card className="w-100 mb-2 text-black">
+                  <Card.Body>
+                    <Card.Title>{event_name}</Card.Title>
+                    <Card.Text className="float-start m-0">
+                      {date.substring(0, date.indexOf("00:00:00"))}
+                      <br />
+                      {slot}
+                    </Card.Text>
+                    {/* <input
                         type="image"
                         src={expandIcon}
                         className="float-end"
                         style={{ height: "20px" }}
                         onClick={() => navigate(`${event_id}`)}
                       /> */}
-                    </Card.Body>
-                  </Card>
-                ))
-              }
+                  </Card.Body>
+                </Card>
+              ))}
             </div>
           </div>
         </div>

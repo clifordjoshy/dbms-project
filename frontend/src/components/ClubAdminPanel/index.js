@@ -71,29 +71,28 @@ const ClubAdminPanel = () => {
   );
 
   return (
-    <div className="mt-3 text-white">
+    <div className="m-3 text-white">
       <div className="d-flex flex-column align-items-center justify-content-center flex-grow-1">
-      <h1>
-        <b>{clubInfo?.club_name}</b>
-      </h1>
-      <textarea
-        style={{width: "800px"}}
-        className="form-control bg-transparent text-white"
-        rows="3"
-        placeholder="<club description here>"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <Button
-        variant={clubInfo?.club_desc === description ? "secondary" : "info"}
-        disabled={clubInfo?.club_desc === description}
-        className="float-end mt-3"
-        onClick={onDescriptionUpdate}
-      >
-        Save Changes
-      </Button>
+        <h1>
+          <b>{clubInfo?.club_name}</b>
+        </h1>
+        <textarea
+          style={{ width: "800px" }}
+          className="form-control bg-transparent text-white"
+          rows="3"
+          placeholder="<club description here>"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Button
+          variant={clubInfo?.club_desc === description ? "secondary" : "info"}
+          disabled={clubInfo?.club_desc === description}
+          className="float-end mt-3"
+          onClick={onDescriptionUpdate}
+        >
+          Save Changes
+        </Button>
       </div>
-      <br />
       <br />
       <div className="collapse-cards">
         <div>

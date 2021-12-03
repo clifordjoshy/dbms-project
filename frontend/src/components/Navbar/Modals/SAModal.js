@@ -41,12 +41,12 @@ const SALoginModal = ({ show, onHide }) => {
             localStorage.setItem("userToken", res.data.access_token);
             localStorage.setItem("userType", "SA");
           }
-          navigate('/admin');
+          navigate("/admin");
         } else {
           setErrors({ login: true });
         }
       });
-  }, [username, password, remember, onHide, setUserToken, setUserType]);
+  }, [username, password, remember, navigate, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

@@ -3,29 +3,25 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "../../App";
 
-
 const SysAdminPanel = () => {
-
-  const [clubs,setClubs] = useState([]);
-  const [venues,setVenues] = useState([]);
-  const {userToken} = useContext(AppContext);
+  const [clubs, setClubs] = useState([]);
+  const [venues, setVenues] = useState([]);
+  const { userToken } = useContext(AppContext);
 
   //get the events the student is registered to
   useEffect(() => {
-    axios
-    .get(process.env.REACT_APP_BACKEND_URL + "clubs_all")
-    .then((res) => {
+    axios.get(process.env.REACT_APP_BACKEND_URL + "clubs_all").then((res) => {
       setClubs(res.data.clubs);
     });
 
     axios
-    .get(process.env.REACT_APP_BACKEND_URL + "venues_all",  {
-      headers: { Authorization: `Bearer ${userToken}` },
-    })
-    .then((res) => {
-      setVenues(res.data.venues);
-    });
-  },[]);
+      .get(process.env.REACT_APP_BACKEND_URL + "venues_all", {
+        headers: { Authorization: `Bearer ${userToken}` },
+      })
+      .then((res) => {
+        setVenues(res.data.venues);
+      });
+  }, [userToken]);
 
   return (
     <>
@@ -43,9 +39,9 @@ const SysAdminPanel = () => {
               );
             })}
           </div>
-          </div>
+        </div>
 
-          <div>
+        <div>
           <h3 className="text-white p-3">Venues</h3>
           <div style={{ height: "500px", width: "500px" }}>
             {venues.map(({ venue_name }) => {

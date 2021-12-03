@@ -39,12 +39,12 @@ const CALoginModal = ({ show, onHide, clubs }) => {
           localStorage.setItem("userToken", res.data.access_token);
           localStorage.setItem("userType", "CA");
         }
-        navigate('/clubadmin')
+        navigate("/clubadmin");
       } else {
         setErrors({ login: true });
       }
     });
-  }, [club, password, remember, onHide, setUserToken, setUserType]);
+  }, [club, password, remember, setUserToken, setUserType, navigate]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

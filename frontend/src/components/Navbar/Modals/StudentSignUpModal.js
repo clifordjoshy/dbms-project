@@ -36,8 +36,6 @@ const StudentSignUpModal = ({ show, onHide }) => {
       return;
     }
 
-    
-
     setLoading(true);
     axios
       .post(process.env.REACT_APP_BACKEND_URL + "register", {
@@ -56,12 +54,12 @@ const StudentSignUpModal = ({ show, onHide }) => {
             localStorage.setItem("userToken", res.data.access_token);
             localStorage.setItem("userType", "student");
           }
-          navigate('/student')
+          navigate("/student");
         } else {
           setErrors({ login: true });
         }
       });
-  }, [email, password, c_password, name, rollNo, remember, onHide, setUserToken, setUserType]);
+  }, [email, password, c_password, name, rollNo, remember, navigate, setUserToken, setUserType]);
 
   return (
     <Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
