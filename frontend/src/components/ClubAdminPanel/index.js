@@ -72,7 +72,7 @@ const ClubAdminPanel = () => {
 
   return (
     <div className="m-3 text-white">
-      <div className="d-flex flex-column align-items-center justify-content-center flex-grow-1">
+      <div className="d-flex mb-5 flex-column align-items-center justify-content-center flex-grow-1">
         <h1>
           <b>{clubInfo?.club_name}</b>
         </h1>
@@ -115,6 +115,7 @@ const ClubAdminPanel = () => {
             </div>
           </div>
           <div className="overflow-auto" style={{ height: "500px" }}>
+          {clubInfo?.members.length === 0 && <h4 className="mt-5 text-white">No members have been added</h4>}
             {clubInfo?.members.map(({ name, roll_no, position }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
@@ -151,6 +152,7 @@ const ClubAdminPanel = () => {
           </div>
 
           <div className="overflow-auto" style={{ height: "500px" }}>
+            {clubInfo?.events.length === 0 && <h4 className="mt-5 text-white">No events have been added</h4>}
             {clubInfo?.events.map(({ event_name, date, slot, event_id }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
