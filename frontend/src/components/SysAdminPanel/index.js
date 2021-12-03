@@ -24,11 +24,11 @@ const SysAdminPanel = () => {
   }, [userToken]);
 
   return (
-    <>
+    <div className="m-3 text-white">
       <div className="collapse-cards">
         <div>
           <h3 className="text-white p-3">Clubs</h3>
-          <div style={{ height: "500px", width: "500px" }}>
+          <div>
             {clubs.map(({ club_name, club_desc }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
@@ -43,7 +43,7 @@ const SysAdminPanel = () => {
 
         <div>
           <h3 className="text-white p-3">Venues</h3>
-          <div style={{ height: "500px", width: "500px" }}>
+          <div>
             {venues.map(({ venue_name }) => {
               return (
                 <Card className="w-100 mb-2 text-black">
@@ -56,7 +56,7 @@ const SysAdminPanel = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -111,7 +111,7 @@ const StudentEvents = () => {
               <Card.Body>
                 <Card.Title>{event.event_name}</Card.Title>
                 <Card.Subtitle className="mb-4 text-muted">{event.event_club}</Card.Subtitle>
-                <Card.Subtitle className="mb-2 text-muted">{`Date: ${event.date}`}</Card.Subtitle>
+                <Card.Subtitle className="mb-2 text-muted">{`Date: ${event.date.substring(0, event.date.indexOf("00:00:00"))}`}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">{`Slot: ${event.slot}`}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">{`Venue: ${event.venue}`}</Card.Subtitle>
                 <Card.Subtitle className="mb-4 text-muted">{`Max participation count: ${event.max_limit}`}</Card.Subtitle>
