@@ -14,8 +14,7 @@ from flask_cors import cross_origin
 from main import db
 db.create_all()
 
-/*accepts student details and adds student to students database*/
-
+#accepts student details and adds student to students database, returns access token
 @app.route('/register', methods=['POST'])
 @cross_origin()
 def user_register():
@@ -47,6 +46,7 @@ def user_register():
     else:
         return jsonify({ "message" : "Roll number already exists" })
 
+#accepts login details, and returns access tokens
 @app.route("/login/student", methods=["POST"])
 @cross_origin()
 def stud_login():
@@ -64,6 +64,7 @@ def stud_login():
     else:
         return jsonify({"message": "Incorrect roll number or password"})
 
+#accepts login details, returns access token
 @app.route("/login/ca", methods=["POST"])
 @cross_origin()
 def ca_login():
@@ -81,6 +82,7 @@ def ca_login():
     else:
         return jsonify({"message": "Incorrect club name or password"})
 
+#accepts login details, returns access token
 @app.route("/login/sa", methods=["POST"])
 @cross_origin()
 def sa_login():
@@ -99,6 +101,7 @@ def sa_login():
     else:
         return jsonify({"message": "Incorrect username or password"})
 
+#accepts event details, enters event into event db and booking in booking db, returns event id
 @app.route("/event_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -125,6 +128,7 @@ def add_event():
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
 
+#accepts new event details if any, and returns the event id
 @app.route("/event_edit", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -141,6 +145,7 @@ def edit_event():
     db.session.commit()
     return jsonify({"event_id":f"{event.event_id}"})
 
+#accepts events id and returns event details
 @app.route("/event_view", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -157,6 +162,7 @@ def view_event():
     event['venue'] = booking.booking_venue_name
     return jsonify({"event":event})
 
+#accept new club details and return confirmation
 @app.route("/club_edit", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -167,6 +173,7 @@ def edit_club():
     db.session.commit()
     return jsonify({"msg":"Edited"})
 
+#accepts member details, enters student into members db, returns confirmation
 @app.route("/club_member_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -182,6 +189,7 @@ def add_member():
     db.session.commit()
     return jsonify({"msg":"Member added."})
 
+#accepts rollnumber, deletes from member db and returns confirmation
 @app.route("/club_member_delete", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -194,6 +202,7 @@ def delete_member():
     db.session.commit()
     return jsonify({"msg":"Member deleted."})
 
+#accepts club details, adds clubs to club db, returns confirmation
 @app.route("/club_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -208,6 +217,7 @@ def add_club():
     db.session.commit()
     return jsonify({"club":f"{club_name}"})
   
+#accepts venue name, enters venue into db, returns confirmation  
 @app.route("/venue_add", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -219,6 +229,7 @@ def add_venue():
     db.session.commit()
     return jsonify({"venue":f"{venue_name}"})
   
+#accepts event id, enters student into participants db, returns confirmation  
 @app.route("/event_register", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -240,14 +251,16 @@ def event_register():
     db.session.add(participant)
     db.session.commit()    
     return jsonify({"msg":"Registered"})
-
+  
+#returns all event details
 @app.route("/events_all", methods=['GET'])
 @cross_origin()
 def events_all():
     events = Events.query.all()
     events = events_schema.dump(events)
     return jsonify({"events":events})
-
+  
+#returns all events
 @app.route("/events_future", methods=['GET'])
 @cross_origin()
 def events_future():
@@ -266,7 +279,8 @@ def events_future():
         event['venue'] = booking.booking_venue_name
 
     return jsonify({"events":future_events})
-
+  
+#return all events
 @app.route("/events_student", methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -288,7 +302,8 @@ def events_student():
         event['venue'] = booking.booking_venue_name
     
     return jsonify({"events":events})
-
+  
+#returns all club details
 @app.route("/clubs_all", methods=['GET'])
 @cross_origin()
 def clubs_all():
@@ -298,7 +313,8 @@ def clubs_all():
         return jsonify({"clubs":clubs})
     except:
         return jsonify({"msg":"No clubs"})
-  
+      
+#returns all venues
 @app.route("/venues_all", methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -309,7 +325,8 @@ def venues_all():
         return jsonify({"venues":venues})
     except:
         return jsonify({"msg":"No venues"})
-  
+      
+#returns all club members  
 @app.route("/club_members", methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -323,6 +340,7 @@ def club_members():
         result['member_roll_number'] = name
     return jsonify({"members":members})
 
+#returns club details
 @app.route("/club_info", methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -350,6 +368,7 @@ def club_info():
     result['events'] = events
     return jsonify({"info":result})
 
+#returns club details
 @app.route("/clubs/<club_name>", methods=['GET'])
 @cross_origin()
 def club_info_student(club_name):
@@ -377,7 +396,8 @@ def club_info_student(club_name):
         return jsonify({"info":result})
     except:
         return jsonify({"msg":"No such club"})
-
+      
+#accepts event id and returns list of participants
 @app.route("/registered_students", methods=['POST'])
 @cross_origin()
 @jwt_required()
@@ -390,7 +410,8 @@ def registered_students():
         participant = Students.query.filter_by(roll_number=participation.participation_roll).first()
         participants.append({'roll_no' : participant.roll_number, 'name' : participant.name, 'email': participant.email})
     return jsonify({"participants":participants})
-  
+ 
+#return student details
 @app.route('/student_details', methods=['GET'])
 @cross_origin()
 @jwt_required()
