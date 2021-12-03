@@ -2,6 +2,11 @@ import Card from "react-bootstrap/Card";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
+/*
+  This panel displays all future events
+ */
+
 const Events = () => {
   const [events, setEvents] = useState([]);
 

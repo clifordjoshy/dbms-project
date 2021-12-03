@@ -8,6 +8,11 @@ import { AppContext } from "../../App";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+/*
+  This panel allows a event to be edited. 
+  A list of all registered students is also displayed here.
+*/
+
 const ClubEventPanel = () => {
   const [eventName, setEventName] = useState("");
   const [eventVenue, setEventVenue] = useState("");

@@ -9,6 +9,16 @@ import NewEventModal from "./NewEventModal";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+/*
+
+  This code is for the admin panel, it displays the club description and allows it to be changed. 
+  It also contains buttons that trigger NewEventModal and NewMemberModal
+
+  1. The NewEventModal is a modal that contains a form for a new event to be created
+  2. The NewMemberModal is a modal that contains a form collecting details of new members. 
+  
+*/
+
 const ClubAdminPanel = () => {
   const { userToken } = useContext(AppContext);
   const [clubInfo, setClubInfo] = useState(null);

@@ -6,6 +6,8 @@ import { AppContext } from "../../App";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal'
 
+/* This panel displays all events a student has registered for, and lists future events he could register for */
+
 const StudentEvents = () => {
   const [events, setEvents] = useState([]);
   const [regEvents, setRegEvents] = useState([]);

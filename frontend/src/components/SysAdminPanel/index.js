@@ -3,6 +3,13 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "../../App";
 
+/*
+
+This is the landing page of the system administrator.
+Two lists will be visible, one for the clubs and the other for the venues that are in the database.
+
+*/
+
 const SysAdminPanel = () => {
   const [clubs, setClubs] = useState([]);
   const [venues, setVenues] = useState([]);

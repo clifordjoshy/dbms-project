@@ -4,6 +4,8 @@ import { useContext } from "react";
 import { AppContext } from "../../App";
 import axios from "axios";
 
+/* This panel displays all details relevant to a student user */
+
 const StudentDetails = () => {
   const [student, setStudent] = useState({});
   const { userToken } = useContext(AppContext);

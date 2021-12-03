@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 
+/*
+This panel displays club description and lists both events and members of the club.
+*/
+
 const ClubDetailsPanel = () => {
   const { clubname } = useParams();
   const [clubInfo, setClubInfo] = useState(null);

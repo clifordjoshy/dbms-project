@@ -3,6 +3,8 @@
 //should not need auth.
 import background from "./background.jpg";
 
+/* this is the home page */
+
 const HomePage = () => {
   return (
     <>
