@@ -88,9 +88,10 @@ def sa_login():
     except KeyError:
         return jsonify({"msg":"One or more fields are empty."})
 
-    user = Users.query.filter_by(username=username).first()
+    user = SysAdmin.query.filter_by(admin_username=username).first()
+    print(generate_password_hash('admin', method='sha256'))
     
-    if user is not None and check_password_hash( user.password, password):
+    if user is not None and check_password_hash( user.admin_password, password):
         access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token)
     else:
