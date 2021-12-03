@@ -4,6 +4,7 @@ from enum import Enum
 # clear db metadata object
 db.metadata.clear()
 
+#defining all tables and schema as defined in the Design document
 
 class Students(db.Model):
     name = db.Column(db.String(50))
