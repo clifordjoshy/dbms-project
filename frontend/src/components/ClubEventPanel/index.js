@@ -150,11 +150,14 @@ const ClubEventPanel = () => {
       <div>
         <h3 className="text-white">Registrations</h3>
         <div className="overflow-auto" style={{ height: "calc(100vh - 200px)" }}>
-          {registrations.map(({ name, roll_no }) => {
+          {registrations.map(({ name, roll_no, email }) => {
             return (
               <Card className="w-100 mb-2 text-black" body>
                 <Card.Title>{name}</Card.Title>
-                <Card.Text className="float-start m-0">{roll_no}</Card.Text>
+                <div className="row"> 
+                  <Card.Subtitle className="text-secondary float-start m-0">{roll_no}</Card.Subtitle>
+                  <Card.Subtitle className="text-secondary float-start m-0">{email}</Card.Subtitle>
+                </div>
               </Card>
             );
           })}

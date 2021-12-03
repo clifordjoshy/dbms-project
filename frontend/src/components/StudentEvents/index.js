@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AppContext } from "../../App";
 import axios from "axios";
+import Modal from 'react-bootstrap/Modal'
 
 const StudentEvents = () => {
   const [events, setEvents] = useState([]);
@@ -12,6 +13,7 @@ const StudentEvents = () => {
 
   const [unregEvents, setUnRegEvents] = useState([]);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [regError, setRegError] = useState("");
 
   //get the events the student is registered to
   useEffect(() => {
@@ -60,10 +62,18 @@ const StudentEvents = () => {
         },
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
-      .then(() => {
-        setIsRegistering(!isRegistering);
+      .then((res) => {
+        if(res.data.msg === "Registered")
+          setIsRegistering(!isRegistering);
+        else
+          throw res.data.msg;
+      })
+      .catch((msg) => {
+          setRegError(msg);
       });
   }
+
+  const errorHandled = () => setRegError("");
 
   return (
     <>
@@ -112,6 +122,14 @@ const StudentEvents = () => {
               </Card.Body>
             </Card>
           ))}
+        <Modal show ={regError !== ""} onHide={errorHandled} size="sm" aria-labelledby="contained-modal-title-vcenter">
+          <Modal.Body>
+            <h5>{regError}</h5>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={errorHandled}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );
