@@ -1,3 +1,6 @@
+Install requirements using "pip install -r requirements".
+Run the server using python3 run.py
+
 /register
 POST
 send: name, roll_no, email, password, confirm_password
